@@ -4,32 +4,10 @@ import type { GameClaim, GameMode } from "../../api/client";
 import type { RoundResult } from "./GameRound";
 import type { OddOneOutResult } from "./OddOneOutRound";
 import { claimPath } from "../../utils/slugify";
+import { getTier, type Tier } from "../../utils/scoring";
 import ShareLinks from "../../components/ShareLinks";
 
 const LENZ_URL = import.meta.env.VITE_LENZ_URL || "https://lenz.io";
-
-// ---------------------------------------------------------------------------
-// Tier helpers
-// ---------------------------------------------------------------------------
-
-interface Tier {
-  label: string;
-  emoji: string;
-  color: string;
-}
-
-function getTier(score: number, mode: GameMode): Tier {
-  // Thresholds scaled per mode: tf=0.5 (max~500), ooo=0.7 (max~700), 4v=1 (max~1000)
-  const t = mode === "tf" ? 0.5 : mode === "ooo" ? 0.7 : 1;
-  if (score >= 900 * t) return { label: "Verdict Virtuoso", emoji: "\u2728", color: "text-true" };
-  if (score >= 700 * t)
-    return { label: "Verification Pro", emoji: "\uD83C\uDFAF", color: "text-true" };
-  if (score >= 500 * t)
-    return { label: "Truth Seeker", emoji: "\uD83D\uDD0D", color: "text-mostly-true" };
-  if (score >= 300 * t)
-    return { label: "Getting There", emoji: "\uD83D\uDCAA", color: "text-misleading" };
-  return { label: "Rookie Checker", emoji: "\uD83C\uDF31", color: "text-false" };
-}
 
 const VERDICT_TEXT_COLOR: Record<string, string> = {
   True: "text-true",

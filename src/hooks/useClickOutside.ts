@@ -2,7 +2,8 @@ import { useEffect, type RefObject } from "react";
 
 /**
  * Calls `onClose` when a mousedown event occurs outside the element
- * referenced by `ref`, but only when `isOpen` is true.
+ * referenced by `ref`, or when the Escape key is pressed, but only
+ * when `isOpen` is true.
  *
  * An optional `excludeRef` can be provided to ignore clicks inside
  * a secondary element (e.g. a mobile menu that shares the same
@@ -22,7 +23,16 @@ export function useClickOutside(
         onClose();
       }
     };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
     document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, [ref, isOpen, onClose, excludeRef]);
 }

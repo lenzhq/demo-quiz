@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import type { GameClaim, GameMode, VoteValue } from "../../api/client";
 import { recordGameView, submitGameVotes } from "../../api/client";
 import { renderEmphasis } from "../../utils/renderEmphasis";
+import { verdictDistance, scoreForDistance } from "../../utils/scoring";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -16,13 +17,6 @@ const TIMER_SECONDS = 15;
 const VERDICTS_4V = ["True", "Mostly True", "Misleading", "False"] as const;
 const VERDICTS_TF = ["True", "False"] as const;
 type Verdict = "True" | "Mostly True" | "Misleading" | "False";
-
-const VERDICT_INDEX: Record<string, number> = {
-  True: 0,
-  "Mostly True": 1,
-  Misleading: 2,
-  False: 3,
-};
 
 const VERDICT_TO_VOTE: Record<string, VoteValue> = {
   True: "true",
@@ -64,20 +58,6 @@ const VERDICT_STYLES: Record<
     dot: "bg-false",
   },
 };
-
-function verdictDistance(a: string, b: string): number {
-  return Math.abs((VERDICT_INDEX[a] ?? 0) - (VERDICT_INDEX[b] ?? 0));
-}
-
-function scoreForDistance(d: number, mode: GameMode): number {
-  if (mode === "tf") {
-    return d === 0 ? 50 : 0;
-  }
-  if (d === 0) return 100;
-  if (d === 1) return 50;
-  if (d === 2) return 25;
-  return 0;
-}
 
 // ---------------------------------------------------------------------------
 // Props & types

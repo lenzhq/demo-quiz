@@ -81,14 +81,18 @@ export default function GamePage() {
 
   const confettiRef = useRef<HTMLDivElement>(null);
 
-  // Track game finish analytics
+  // Track game finish analytics — captures values at the moment phase becomes "summary"
+  const scoreRef = useRef(score);
+  const bestStreakRef = useRef(bestStreak);
+  scoreRef.current = score;
+  bestStreakRef.current = bestStreak;
+
   useEffect(() => {
     if (phase === "summary") {
       const rounds = mode === "ooo" ? oooResults.length : results.length;
-      trackGameFinish(score, rounds, bestStreak, mode);
+      trackGameFinish(scoreRef.current, rounds, bestStreakRef.current, mode);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase]);
+  }, [phase, mode, oooResults.length, results.length]);
 
   // Inject confetti keyframes once
   useEffect(() => {

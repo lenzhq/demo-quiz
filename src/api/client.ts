@@ -43,6 +43,7 @@ function fetchWithTimeout(
 // GET request deduplication
 // ---------------------------------------------------------------------------
 
+const MAX_INFLIGHT = 20;
 const _inflight = new Map<string, Promise<Response>>();
 
 function deduplicatedFetch(
@@ -55,6 +56,9 @@ function deduplicatedFetch(
 
   const existing = _inflight.get(input);
   if (existing) return existing.then((r) => r.clone());
+
+  // Safety bound: clear stale entries if the map grows too large
+  if (_inflight.size >= MAX_INFLIGHT) _inflight.clear();
 
   const promise = fetchWithRetry(input, init, opts).finally(() => _inflight.delete(input));
   _inflight.set(input, promise);
