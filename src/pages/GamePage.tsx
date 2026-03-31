@@ -219,11 +219,11 @@ export default function GamePage() {
           property="og:description"
           content="Can you tell fact from fiction? Test your instincts on real verified claims."
         />
-        <meta property="og:image" content="https://lenz.io/media/play-og-image.png?v=3" />
+        <meta property="og:image" content="https://play.lenz.io/play-og-image.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://lenz.io/media/play-og-image.png?v=3" />
+        <meta name="twitter:image" content="https://play.lenz.io/play-og-image.png" />
       </Helmet>
 
       <div className="px-4 pt-4 pb-2">
