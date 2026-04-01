@@ -211,7 +211,7 @@ export default function ShareLinks(props: ShareLinksProps) {
       {/* Trigger */}
       {buttonLabel ? (
         <button
-          className="rounded-xl border-2 border-warm-200 bg-white px-6 py-3 text-warm-700 font-bold text-sm
+          className="rounded-xl border-2 border-warm-200 bg-surface px-6 py-3 text-warm-700 font-bold text-sm
                      hover:border-warm-300 active:scale-[0.97] transition-all cursor-pointer
                      inline-flex items-center gap-2"
           onClick={toggleMenu}
@@ -241,7 +241,7 @@ export default function ShareLinks(props: ShareLinksProps) {
         <span
           id="share-menu"
           role="menu"
-          className={`absolute ${buttonLabel ? "left-1/2 -translate-x-1/2" : "right-0"} z-[60] rounded-lg border border-warm-200 bg-warm-50 shadow-[0_4px_12px_rgba(0,0,0,0.12)] animate-in fade-in slide-in-from-bottom-1 duration-150 ${menuBelow ? "top-full mt-2" : "bottom-full mb-2"} ${showPreview ? "flex flex-row w-[calc(100vw-4rem)] sm:w-auto p-0 rounded-[0.625rem]" : "w-auto sm:w-48 py-1.5"}`}
+          className={`absolute ${buttonLabel ? "left-1/2 -translate-x-1/2" : "right-0"} z-[60] rounded-lg border border-warm-200 bg-warm-50 shadow-lg animate-in fade-in slide-in-from-bottom-1 duration-150 ${menuBelow ? "top-full mt-2" : "bottom-full mb-2"} ${showPreview ? "flex flex-row w-[calc(100vw-4rem)] sm:w-auto p-0 rounded-[0.625rem]" : "w-auto sm:w-48 py-1.5"}`}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();

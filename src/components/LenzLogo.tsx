@@ -5,7 +5,7 @@ interface LenzLogoProps {
 
 export default function LenzLogo({ className = "h-6", variant = "default" }: LenzLogoProps) {
   const textFill = variant === "white" ? "#FFFFFF" : "currentColor";
-  const dotFill = variant === "white" ? "#FFFFFF" : "#4B7BE5";
+  const dotFill = variant === "white" ? "#FFFFFF" : "var(--color-primary)";
 
   return (
     <svg

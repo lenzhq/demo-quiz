@@ -230,7 +230,7 @@ export default function GameRound({
           <span className="text-xs font-semibold text-warm-500">
             Round {roundNumber} of {totalRounds}
           </span>
-          <span className="text-xs font-bold text-primary">{score} pts</span>
+          <span className="text-xs font-bold text-primary-text">{score} pts</span>
         </div>
         <div className="flex gap-1">
           {Array.from({ length: totalRounds }).map((_, i) => {
@@ -255,11 +255,11 @@ export default function GameRound({
       </div>
 
       {/* Claim card */}
-      <div className="relative bg-white rounded-2xl border border-warm-200 shadow-sm p-6 sm:p-8 mb-6">
+      <div className="relative bg-surface rounded-2xl border border-warm-200 shadow-sm p-6 sm:p-8 mb-6">
         {/* Domain pill & date */}
         <div className="flex items-center gap-2 mb-4 flex-wrap">
           {claim.domain && (
-            <span className="inline-flex items-center rounded-full bg-primary/8 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
+            <span className="inline-flex items-center rounded-full bg-primary/8 px-2.5 py-0.5 text-[11px] font-semibold text-primary-text">
               {claim.domain}
             </span>
           )}
@@ -361,7 +361,7 @@ export default function GameRound({
               +{pointsEarned}
             </span>
             {streakBonus > 0 && (
-              <span className="text-sm font-bold text-primary animate-[fadeIn_0.5s_ease-out_0.2s_both]">
+              <span className="text-sm font-bold text-primary-text animate-[fadeIn_0.5s_ease-out_0.2s_both]">
                 +{streakBonus} streak!
               </span>
             )}

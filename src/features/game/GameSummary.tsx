@@ -142,34 +142,34 @@ export default function GameSummary({
       {/* Stats row */}
       {isOoo ? (
         <div className="grid grid-cols-2 gap-3 mb-8">
-          <div className="bg-white rounded-xl border border-warm-200 p-4 text-center">
+          <div className="bg-surface rounded-xl border border-warm-200 p-4 text-center">
             <p className="text-2xl font-black text-true">{exactCount}</p>
             <p className="text-xs text-warm-400 font-medium">Correct</p>
           </div>
-          <div className="bg-white rounded-xl border border-warm-200 p-4 text-center">
-            <p className="text-2xl font-black text-primary">{bestStreak}</p>
+          <div className="bg-surface rounded-xl border border-warm-200 p-4 text-center">
+            <p className="text-2xl font-black text-primary-text">{bestStreak}</p>
             <p className="text-xs text-warm-400 font-medium">Best Streak</p>
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-3 mb-8">
-          <div className="bg-white rounded-xl border border-warm-200 p-4 text-center">
+          <div className="bg-surface rounded-xl border border-warm-200 p-4 text-center">
             <p className="text-2xl font-black text-true">{exactCount}</p>
             <p className="text-xs text-warm-400 font-medium">Exact</p>
           </div>
-          <div className="bg-white rounded-xl border border-warm-200 p-4 text-center">
+          <div className="bg-surface rounded-xl border border-warm-200 p-4 text-center">
             <p className="text-2xl font-black text-mostly-true">{closeCount}</p>
             <p className="text-xs text-warm-400 font-medium">Close</p>
           </div>
-          <div className="bg-white rounded-xl border border-warm-200 p-4 text-center">
-            <p className="text-2xl font-black text-primary">{bestStreak}</p>
+          <div className="bg-surface rounded-xl border border-warm-200 p-4 text-center">
+            <p className="text-2xl font-black text-primary-text">{bestStreak}</p>
             <p className="text-xs text-warm-400 font-medium">Best Streak</p>
           </div>
         </div>
       )}
 
       {/* Round recap */}
-      <div className="bg-white rounded-2xl border border-warm-200 shadow-sm mb-8 overflow-hidden">
+      <div className="bg-surface rounded-2xl border border-warm-200 shadow-sm mb-8 overflow-hidden">
         <div className="px-5 py-3 border-b border-warm-100">
           <p className="text-xs font-semibold text-warm-500 uppercase tracking-wide">Round Recap</p>
         </div>
@@ -273,7 +273,7 @@ export default function GameSummary({
 
         <a
           href={`${LENZ_URL}/library`}
-          className="rounded-xl border-2 border-warm-200 bg-white px-6 py-3 text-warm-700 font-bold text-sm
+          className="rounded-xl border-2 border-warm-200 bg-surface px-6 py-3 text-warm-700 font-bold text-sm
                      hover:border-warm-300 transition-all text-center"
         >
           Explore Library

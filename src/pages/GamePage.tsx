@@ -18,7 +18,14 @@ const LENZ_URL = import.meta.env.VITE_LENZ_URL || "https://lenz.io";
 // ---------------------------------------------------------------------------
 
 function spawnConfetti(container: HTMLElement) {
-  const COLORS = ["#14783A", "#A16207", "#1D4ED8", "#B91C1C", "#7C3AED", "#EC4899"];
+  const COLORS = [
+    "var(--color-true)",
+    "var(--color-mostly-true)",
+    "var(--color-primary)",
+    "var(--color-false)",
+    "#7C3AED",  // decorative purple
+    "#EC4899",  // decorative pink
+  ];
   const COUNT = 40;
   const frag = document.createDocumentFragment();
 

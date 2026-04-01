@@ -12,7 +12,7 @@ export default function GameIntro({ onStart, loading }: GameIntroProps) {
       <div className="mb-6 w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="w-10 h-10 text-primary"
+          className="w-10 h-10 text-primary-text"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -48,14 +48,14 @@ export default function GameIntro({ onStart, loading }: GameIntroProps) {
         <button
           onClick={() => onStart("ooo")}
           disabled={loading}
-          className="group relative rounded-2xl border-2 border-false/30 bg-white p-5 text-left
+          className="group relative rounded-2xl border-2 border-false/30 bg-surface p-5 text-left
                      sm:col-span-2
                      hover:border-false/60 hover:shadow-lg hover:shadow-false/10 hover:scale-[1.02]
                      active:scale-[0.98] transition-all
                      disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           {/* New badge */}
-          <span className="absolute top-3 right-3 inline-flex items-center rounded-full bg-blue-600/[0.08] px-2 py-0.5 text-[10px] font-bold text-blue-600 uppercase tracking-wide">
+          <span className="absolute top-3 right-3 inline-flex items-center rounded-full bg-primary/[0.08] px-2 py-0.5 text-[10px] font-bold text-primary-text uppercase tracking-wide">
             New
           </span>
           <div className="flex items-center gap-2 mb-2">
@@ -87,7 +87,7 @@ export default function GameIntro({ onStart, loading }: GameIntroProps) {
         <button
           onClick={() => onStart("tf")}
           disabled={loading}
-          className="group relative rounded-2xl border-2 border-true/30 bg-white p-5 text-left
+          className="group relative rounded-2xl border-2 border-true/30 bg-surface p-5 text-left
                      hover:border-true/60 hover:shadow-lg hover:shadow-true/10 hover:scale-[1.02]
                      active:scale-[0.98] transition-all
                      disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
@@ -116,13 +116,13 @@ export default function GameIntro({ onStart, loading }: GameIntroProps) {
         <button
           onClick={() => onStart("4v")}
           disabled={loading}
-          className="group relative rounded-2xl border-2 border-primary/30 bg-white p-5 text-left
+          className="group relative rounded-2xl border-2 border-primary/30 bg-surface p-5 text-left
                      hover:border-primary/60 hover:shadow-lg hover:shadow-primary/10 hover:scale-[1.02]
                      active:scale-[0.98] transition-all
                      disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           <div className="flex items-center gap-2 mb-2">
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary text-sm font-black">
+            <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary-text text-sm font-black">
               4
             </span>
             <h3 className="text-base font-extrabold text-warm-800">Four Verdicts</h3>

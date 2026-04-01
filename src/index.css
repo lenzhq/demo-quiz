@@ -2,6 +2,7 @@
 
 @theme {
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
   --color-cream: #fffdf7;
   --color-warm-50: #faf8f5;
   --color-warm-100: #f3f0eb;
@@ -13,8 +14,10 @@
   --color-warm-700: #3d3935;
   --color-warm-800: #2a2724;
   --color-warm-900: #1a1816;
-  --color-primary: #1d4ed8;
-  --color-primary-hover: #1e40af;
+  --color-primary: #4B7BE5;
+  --color-primary-hover: #3D65BC;
+  --color-primary-text: #3D65BC;
+  --color-surface: #FFFFFF;
   --color-true: #14783a;
   --color-true-bg: #f0fdf4;
   --color-mostly-true: #a16207;
@@ -23,6 +26,9 @@
   --color-misleading-bg: #f5f5f4;
   --color-false: #b91c1c;
   --color-false-bg: #fef2f2;
+  --shadow-sm: 0 1px 2px rgba(28,25,23,0.04);
+  --shadow-md: 0 2px 8px rgba(28,25,23,0.06), 0 1px 2px rgba(28,25,23,0.04);
+  --shadow-lg: 0 4px 16px rgba(28,25,23,0.08), 0 2px 4px rgba(28,25,23,0.04);
 }
 
 /* ── App-feel ── */

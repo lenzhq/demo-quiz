@@ -195,7 +195,7 @@ export default function OddOneOutRound({
           <span className="text-xs font-semibold text-warm-500">
             Round {roundNumber} of {totalRounds}
           </span>
-          <span className="text-xs font-bold text-primary">{score} pts</span>
+          <span className="text-xs font-bold text-primary-text">{score} pts</span>
         </div>
         <div className="flex gap-1">
           {Array.from({ length: totalRounds }).map((_, i) => {
@@ -246,7 +246,7 @@ export default function OddOneOutRound({
               onClick={() => phase === "guess" && handleSelect(idx)}
               disabled={phase !== "guess"}
               tabIndex={isFocused ? 0 : -1}
-              className={`relative rounded-xl overflow-hidden ${borderClass} bg-white text-left
+              className={`relative rounded-xl overflow-hidden ${borderClass} bg-surface text-left
                          transition-all cursor-pointer
                          ${phase === "guess" ? "hover:border-warm-400 hover:shadow-md hover:scale-[1.01] active:scale-[0.99] active:bg-warm-50" : ""}
                          disabled:cursor-default`}
@@ -270,7 +270,7 @@ export default function OddOneOutRound({
                   {/* Domain + date */}
                   <div className="flex items-center gap-2 mt-1.5 flex-wrap">
                     {claim.domain && (
-                      <span className="inline-flex items-center rounded-full bg-primary/8 px-2 py-0.5 text-[10px] font-semibold text-primary">
+                      <span className="inline-flex items-center rounded-full bg-primary/8 px-2 py-0.5 text-[10px] font-semibold text-primary-text">
                         {claim.domain}
                       </span>
                     )}
@@ -373,7 +373,7 @@ export default function OddOneOutRound({
               </span>
             )}
             {streakBonusEarned > 0 && (
-              <span className="text-sm font-bold text-primary animate-[fadeIn_0.5s_ease-out_0.2s_both]">
+              <span className="text-sm font-bold text-primary-text animate-[fadeIn_0.5s_ease-out_0.2s_both]">
                 +{streakBonusEarned} streak!
               </span>
             )}
