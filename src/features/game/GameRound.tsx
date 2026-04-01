@@ -112,10 +112,12 @@ export default function GameRound({
   const [focusedIndex, setFocusedIndex] = useState(0);
   const [keyboardActive, setKeyboardActive] = useState(false);
 
-  // Record view on mount (key={share_id} on parent remounts on claim change)
+  // Record view when the executive summary is shown
   useEffect(() => {
-    recordGameView(claim.share_id);
-  }, [claim.share_id]);
+    if (showSummary && claim.executive_summary) {
+      recordGameView(claim.share_id);
+    }
+  }, [showSummary, claim.share_id, claim.executive_summary]);
 
   // Timer: auto-timeout after TIMER_SECONDS during guess phase
   useEffect(() => {

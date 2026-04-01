@@ -111,6 +111,7 @@ export function recordGameView(shareId: string): void {
     `${API_BASE}/game/view/${shareId}`,
     {
       method: "POST",
+      headers: { "X-CSRFToken": getCSRFToken() },
       credentials: "include",
     },
     10_000,

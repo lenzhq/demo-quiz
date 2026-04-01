@@ -67,10 +67,14 @@ export default function OddOneOutRound({
 
   const falseIndex = claims.findIndex((c) => c.conclusion_label.toLowerCase() === "false");
 
-  // Record views on mount
+  // Record view only for the false claim when its executive summary is shown
   useEffect(() => {
-    claims.forEach((c) => recordGameView(c.share_id));
-  }, [claims]);
+    if (!showDetails) return;
+    const falseClaim = claims[falseIndex];
+    if (falseClaim?.executive_summary) {
+      recordGameView(falseClaim.share_id);
+    }
+  }, [showDetails, claims, falseIndex]);
 
   // Reset start time on mount
   useEffect(() => {
