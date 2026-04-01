@@ -23,8 +23,8 @@ function spawnConfetti(container: HTMLElement) {
     "var(--color-mostly-true)",
     "var(--color-primary)",
     "var(--color-false)",
-    "#7C3AED",  // decorative purple
-    "#EC4899",  // decorative pink
+    "var(--color-confetti-purple)",
+    "var(--color-confetti-pink)",
   ];
   const COUNT = 40;
   const frag = document.createDocumentFragment();

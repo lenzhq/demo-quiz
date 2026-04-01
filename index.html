@@ -17,6 +17,26 @@
     <meta name="twitter:title" content="Fact or Fiction | Lenz" />
     <meta name="twitter:description" content="Can you tell fact from fiction? Test your instincts on real verified claims." />
     <meta name="twitter:image" content="https://play.lenz.io/play-og-image.png" />
+    <meta name="theme-color" content="#FFFDF7" />
+    <!-- Theme: read lenz_theme cookie from parent site, fall back to OS preference -->
+    <script>
+    (function(){
+      var d=document.documentElement,m='(prefers-color-scheme:dark)';
+      var c=document.cookie.split(';').find(function(s){return s.trim().startsWith('lenz_theme=')});
+      var p=c?c.split('=')[1].trim():'system';
+      var r=p==='system'?(window.matchMedia&&window.matchMedia(m).matches?'dark':'light'):p;
+      d.dataset.theme=r;
+      var tc=document.querySelector('meta[name="theme-color"]');
+      if(tc)tc.content=r==='dark'?'#1A1816':'#FFFDF7';
+      try{window.matchMedia(m).addEventListener('change',function(){
+        if(p==='system'){
+          r=window.matchMedia(m).matches?'dark':'light';
+          d.dataset.theme=r;
+          if(tc)tc.content=r==='dark'?'#1A1816':'#FFFDF7';
+        }
+      })}catch(e){}
+    })();
+    </script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4SQR9DKLEW"></script>
     <script>

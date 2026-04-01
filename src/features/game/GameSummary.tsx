@@ -182,7 +182,7 @@ export default function GameSummary({
                 return (
                   <li key={i} className="px-5 py-3 flex items-start gap-3">
                     <span
-                      className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white mt-0.5
+                      className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-cream mt-0.5
                         ${r.correct ? "bg-true" : "bg-false"}`}
                     >
                       {r.correct ? "\u2713" : "\u2717"}
@@ -217,7 +217,7 @@ export default function GameSummary({
                 return (
                   <li key={i} className="px-5 py-3 flex items-start gap-3">
                     <span
-                      className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white mt-0.5
+                      className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-cream mt-0.5
                         ${r.distance === 0 ? "bg-true" : r.distance === 1 ? "bg-mostly-true" : r.distance === 2 ? "bg-misleading" : "bg-false"}`}
                     >
                       {r.distance === 0 ? "\u2713" : r.distance}
@@ -256,7 +256,7 @@ export default function GameSummary({
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
         <button
           onClick={onPlayAgain}
-          className="rounded-xl bg-primary px-6 py-3 text-white font-bold text-sm
+          className="rounded-xl bg-primary px-6 py-3 text-cream font-bold text-sm
                      hover:bg-primary-hover active:scale-[0.97] transition-all
                      shadow-md shadow-primary/15 cursor-pointer"
         >

@@ -382,7 +382,7 @@ export default function OddOneOutRound({
           <div className="flex justify-center">
             <button
               onClick={onNext}
-              className="rounded-xl bg-primary px-6 py-3 text-white font-bold text-sm
+              className="rounded-xl bg-primary px-6 py-3 text-cream font-bold text-sm
                          hover:bg-primary-hover active:scale-[0.97] transition-all
                          shadow-md shadow-primary/15 cursor-pointer"
             >

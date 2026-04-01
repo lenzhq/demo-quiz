@@ -26,9 +26,44 @@
   --color-misleading-bg: #f5f5f4;
   --color-false: #b91c1c;
   --color-false-bg: #fef2f2;
+  --color-confetti-purple: #7C3AED;
+  --color-confetti-pink: #EC4899;
   --shadow-sm: 0 1px 2px rgba(28,25,23,0.04);
   --shadow-md: 0 2px 8px rgba(28,25,23,0.06), 0 1px 2px rgba(28,25,23,0.04);
   --shadow-lg: 0 4px 16px rgba(28,25,23,0.08), 0 2px 4px rgba(28,25,23,0.04);
+}
+
+/* ── Dark mode ── */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --color-cream: #1A1816;
+  --color-warm-50: #211F1C;
+  --color-warm-100: #353230;
+  --color-warm-200: #3D3935;
+  --color-warm-300: #5C5751;
+  --color-warm-400: #A8A29E;
+  --color-warm-500: #D4CFC6;
+  --color-warm-600: #E8E4DD;
+  --color-warm-700: #F3F0EB;
+  --color-warm-800: #FAF8F5;
+  --color-warm-900: #FFFDF7;
+  --color-primary: #7BA3F0;
+  --color-primary-hover: #9BBBF5;
+  --color-primary-text: #7BA3F0;
+  --color-surface: #2A2724;
+  --color-true: #4ADE80;
+  --color-true-bg: rgba(74,222,128,0.08);
+  --color-mostly-true: #FBBF24;
+  --color-mostly-true-bg: rgba(251,191,36,0.08);
+  --color-false: #F87171;
+  --color-false-bg: rgba(248,113,113,0.08);
+  --color-misleading: #A8A29E;
+  --color-misleading-bg: rgba(168,162,158,0.08);
+  --color-confetti-purple: #A78BFA;
+  --color-confetti-pink: #F9A8D4;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.2);
 }
 
 /* ── App-feel ── */
