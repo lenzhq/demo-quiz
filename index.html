@@ -37,13 +37,30 @@
       })}catch(e){}
     })();
     </script>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4SQR9DKLEW"></script>
+    <!-- Google tag (gtag.js) via sGTM -->
     <script>
+    (function() {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://t.lenz.io/gtag/js?id=G-4SQR9DKLEW';
+      document.head.appendChild(s);
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      window.gtag = function(){dataLayer.push(arguments);};
       gtag('js', new Date());
-      gtag('config', 'G-4SQR9DKLEW');
+      gtag('config', 'G-4SQR9DKLEW', { server_container_url: 'https://t.lenz.io', allow_google_signals: false, allow_ad_personalization_signals: false });
+      // Capture first external referrer for acquisition tracking (1 month)
+      if (!document.cookie.match(/(?:^|;\s*)_lenz_ref=/)) {
+        var ref = document.referrer;
+        if (ref) {
+          try {
+            var refHost = new URL(ref).hostname;
+            if (refHost !== location.hostname) {
+              document.cookie = '_lenz_ref=' + encodeURIComponent(ref) + ';path=/;SameSite=Lax;max-age=2592000';
+            }
+          } catch(e) {}
+        }
+      }
+    })();
     </script>
   </head>
   <body>
