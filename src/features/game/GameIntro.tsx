@@ -8,24 +8,6 @@ interface GameIntroProps {
 export default function GameIntro({ onStart, loading }: GameIntroProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] px-4 text-center">
-      {/* Icon */}
-      <div className="mb-6 w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-10 h-10 text-primary-text"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.5}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75" />
-          <circle cx="12" cy="17" r=".5" fill="currentColor" />
-          <circle cx="12" cy="12" r="10" />
-        </svg>
-      </div>
-
       <h1 className="text-3xl sm:text-4xl font-extrabold text-warm-800 mb-3 tracking-tight">
         Fact or Fiction
       </h1>
