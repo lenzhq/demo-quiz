@@ -249,9 +249,9 @@ export default function GamePage() {
         {/* Confetti container */}
         <div ref={confettiRef} className="absolute inset-0 pointer-events-none overflow-hidden" />
 
-        {phase === "intro" && <GameIntro onStart={(m) => loadClaims(m)} loading={false} />}
+        {phase === "intro" && <GameIntro onStart={(m) => loadClaims(m)} loading={false} embedded={IS_EMBEDDED} />}
 
-        {phase === "loading" && <GameIntro onStart={(m) => loadClaims(m)} loading={true} />}
+        {phase === "loading" && <GameIntro onStart={(m) => loadClaims(m)} loading={true} embedded={IS_EMBEDDED} />}
 
         {error && (
           <div className="max-w-md mx-auto mt-4 px-4">

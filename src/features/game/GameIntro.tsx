@@ -3,11 +3,13 @@ import type { GameMode } from "../../api/client";
 interface GameIntroProps {
   onStart: (mode: GameMode) => void;
   loading: boolean;
+  embedded?: boolean;
 }
 
-export default function GameIntro({ onStart, loading }: GameIntroProps) {
+export default function GameIntro({ onStart, loading, embedded }: GameIntroProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] px-4 text-center">
+      {embedded && <div className="pt-8" />}
       <h1 className="text-3xl sm:text-4xl font-extrabold text-warm-800 mb-3 tracking-tight">
         Fact or Fiction
       </h1>
