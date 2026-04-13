@@ -12,6 +12,7 @@ import type { OddOneOutResult } from "../features/game/OddOneOutRound";
 import GameSummary from "../features/game/GameSummary";
 
 const LENZ_URL = import.meta.env.VITE_LENZ_URL || "https://lenz.io";
+const IS_EMBEDDED = new URLSearchParams(window.location.search).has("embedded");
 
 // ---------------------------------------------------------------------------
 // Confetti helpers (lightweight CSS-only particles)
@@ -233,14 +234,16 @@ export default function GamePage() {
         <meta name="twitter:image" content="https://play.lenz.io/play-og-image.png" />
       </Helmet>
 
-      <div className="px-4 pt-4 pb-2">
-        <a href={LENZ_URL} className="inline-flex items-center gap-1.5 text-secondary hover:text-primary transition-colors text-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-            <path fillRule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clipRule="evenodd" />
-          </svg>
-          <LenzLogo className="h-4" />
-        </a>
-      </div>
+      {!IS_EMBEDDED && (
+        <div className="px-4 pt-4 pb-2">
+          <a href={LENZ_URL} className="inline-flex items-center gap-1.5 text-secondary hover:text-primary transition-colors text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+              <path fillRule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clipRule="evenodd" />
+            </svg>
+            <LenzLogo className="h-4" />
+          </a>
+        </div>
+      )}
 
       <main className="flex-1 pt-2 pb-16 relative overflow-hidden min-h-screen">
         {/* Confetti container */}
