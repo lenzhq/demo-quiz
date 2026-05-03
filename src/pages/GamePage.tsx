@@ -81,7 +81,8 @@ const TOTAL_ROUNDS = 10;
 type Phase = "intro" | "loading" | "playing" | "summary";
 
 export default function GamePage() {
-  const [phase, setPhase] = useState<Phase>("intro");
+  const [phase, setPhase] = useState<Phase>(AUTO_START_MODE ? "loading" : "intro");
+  const [autoStartPending, setAutoStartPending] = useState(!!AUTO_START_MODE);
   const [mode, setMode] = useState<GameMode>("4v");
   const [claims, setClaims] = useState<GameClaim[]>([]);
   const [currentRound, setCurrentRound] = useState(0);
@@ -178,7 +179,7 @@ export default function GamePage() {
   useEffect(() => {
     if (AUTO_START_MODE && !autoStartedRef.current) {
       autoStartedRef.current = true;
-      loadClaims(AUTO_START_MODE);
+      loadClaims(AUTO_START_MODE).finally(() => setAutoStartPending(false));
     }
   }, [loadClaims]);
 
@@ -264,9 +265,9 @@ export default function GamePage() {
         {/* Confetti container */}
         <div ref={confettiRef} className="absolute inset-0 pointer-events-none overflow-hidden" />
 
-        {phase === "intro" && <GameIntro onStart={(m) => loadClaims(m)} loading={false} embedded={IS_EMBEDDED} />}
+        {phase === "intro" && !autoStartPending && <GameIntro onStart={(m) => loadClaims(m)} loading={false} embedded={IS_EMBEDDED} />}
 
-        {phase === "loading" && <GameIntro onStart={(m) => loadClaims(m)} loading={true} embedded={IS_EMBEDDED} />}
+        {phase === "loading" && !autoStartPending && <GameIntro onStart={(m) => loadClaims(m)} loading={true} embedded={IS_EMBEDDED} />}
 
         {error && (
           <div className="max-w-md mx-auto mt-4 px-4">
