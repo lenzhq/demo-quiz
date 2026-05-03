@@ -38,10 +38,6 @@ export default function GameIntro({ onStart, loading, embedded }: GameIntroProps
                      active:scale-[0.98] transition-all
                      disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
-          {/* New badge */}
-          <span className="absolute top-3 right-3 inline-flex items-center rounded-full bg-primary/[0.08] px-2 py-0.5 text-[10px] font-bold text-primary-text uppercase tracking-wide">
-            New
-          </span>
           <div className="flex items-center gap-2 mb-2">
             <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-false/10 text-false text-sm font-black">
               3

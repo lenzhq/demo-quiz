@@ -12,7 +12,13 @@ import type { OddOneOutResult } from "../features/game/OddOneOutRound";
 import GameSummary from "../features/game/GameSummary";
 
 const LENZ_URL = import.meta.env.VITE_LENZ_URL || "https://lenz.io";
-const IS_EMBEDDED = new URLSearchParams(window.location.search).has("embedded");
+const QUERY_PARAMS = new URLSearchParams(window.location.search);
+const IS_EMBEDDED = QUERY_PARAMS.has("embedded");
+const VALID_MODES: GameMode[] = ["ooo", "tf", "4v"];
+const AUTO_START_MODE = (() => {
+  const m = QUERY_PARAMS.get("mode");
+  return m && (VALID_MODES as string[]).includes(m) ? (m as GameMode) : null;
+})();
 
 // ---------------------------------------------------------------------------
 // Confetti helpers (lightweight CSS-only particles)
@@ -130,6 +136,8 @@ export default function GamePage() {
     document.head.appendChild(style);
   }, []);
 
+  const autoStartedRef = useRef(false);
+
   const loadClaims = useCallback(async (m: GameMode) => {
     setMode(m);
     setPhase("loading");
@@ -166,6 +174,13 @@ export default function GamePage() {
       setPhase("intro");
     }
   }, []);
+
+  useEffect(() => {
+    if (AUTO_START_MODE && !autoStartedRef.current) {
+      autoStartedRef.current = true;
+      loadClaims(AUTO_START_MODE);
+    }
+  }, [loadClaims]);
 
   const handleAnswer = useCallback(
     (result: RoundResult) => {
