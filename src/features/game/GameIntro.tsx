@@ -92,9 +92,9 @@ export default function GameIntro({ onStart, loading, embedded }: GameIntroProps
           <p className="mt-3 text-[10px] font-semibold text-warm-400">50 pts max per round</p>
         </button>
 
-        {/* Four Verdicts card */}
+        {/* Five Verdicts card */}
         <button
-          onClick={() => onStart("4v")}
+          onClick={() => onStart("5v")}
           disabled={loading}
           className="group relative rounded-2xl border-2 border-primary/30 bg-surface p-5 text-left
                      hover:border-primary/60 hover:shadow-lg hover:shadow-primary/10 hover:scale-[1.02]
@@ -103,9 +103,9 @@ export default function GameIntro({ onStart, loading, embedded }: GameIntroProps
         >
           <div className="flex items-center gap-2 mb-2">
             <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary-text text-sm font-black">
-              4
+              5
             </span>
-            <h3 className="text-base font-extrabold text-warm-800">Four Verdicts</h3>
+            <h3 className="text-base font-extrabold text-warm-800">Five Verdicts</h3>
           </div>
           <p className="text-xs text-warm-500 leading-relaxed mb-3">
             All verdict types. More nuance, more points to earn.
@@ -117,8 +117,11 @@ export default function GameIntro({ onStart, loading, embedded }: GameIntroProps
             <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-mostly-true/10 text-mostly-true">
               <span className="w-1.5 h-1.5 rounded-full bg-mostly-true" /> Mostly True
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-misleading/10 text-misleading">
-              <span className="w-1.5 h-1.5 rounded-full bg-misleading" /> Misleading
+            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-mixed/10 text-mixed">
+              <span className="w-1.5 h-1.5 rounded-full bg-mixed" /> Mixed
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-mostly-false/10 text-mostly-false">
+              <span className="w-1.5 h-1.5 rounded-full bg-mostly-false" /> Mostly False
             </span>
             <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-false/10 text-false">
               <span className="w-1.5 h-1.5 rounded-full bg-false" /> False
