@@ -1,14 +1,17 @@
 import type { GameMode } from "../api/client";
 
 // ---------------------------------------------------------------------------
-// Verdict distance (4-point scale)
+// Verdict distance (5-point scale)
 // ---------------------------------------------------------------------------
 
 const VERDICT_INDEX: Record<string, number> = {
   True: 0,
   "Mostly True": 1,
+  Mixed: 2,
+  "Mostly False": 3,
+  False: 4,
+  // Legacy label (pre-5-point) — kept so older cached claims still score.
   Misleading: 2,
-  False: 3,
 };
 
 export function verdictDistance(a: string, b: string): number {
@@ -22,6 +25,7 @@ export function scoreForDistance(d: number, mode: GameMode): number {
   if (d === 0) return 100;
   if (d === 1) return 50;
   if (d === 2) return 25;
+  if (d === 3) return 10;
   return 0;
 }
 
@@ -62,6 +66,6 @@ export function getTier(score: number, mode: GameMode): Tier {
   if (score >= 500 * t)
     return { label: "Truth Seeker", emoji: "\uD83D\uDD0D", color: "text-mostly-true" };
   if (score >= 300 * t)
-    return { label: "Getting There", emoji: "\uD83D\uDCAA", color: "text-misleading" };
+    return { label: "Getting There", emoji: "\uD83D\uDCAA", color: "text-mixed" };
   return { label: "Rookie Checker", emoji: "\uD83C\uDF31", color: "text-false" };
 }

@@ -14,9 +14,10 @@ import GameSummary from "../features/game/GameSummary";
 const LENZ_URL = import.meta.env.VITE_LENZ_URL || "https://lenz.io";
 const QUERY_PARAMS = new URLSearchParams(window.location.search);
 const IS_EMBEDDED = QUERY_PARAMS.has("embedded");
-const VALID_MODES: GameMode[] = ["ooo", "tf", "4v"];
+const VALID_MODES: GameMode[] = ["ooo", "tf", "5v"];
 const AUTO_START_MODE = (() => {
-  const m = QUERY_PARAMS.get("mode");
+  let m = QUERY_PARAMS.get("mode");
+  if (m === "4v") m = "5v"; // legacy alias — old ?mode=4v bookmarks
   return m && (VALID_MODES as string[]).includes(m) ? (m as GameMode) : null;
 })();
 
@@ -83,7 +84,7 @@ type Phase = "intro" | "loading" | "playing" | "summary";
 export default function GamePage() {
   const [phase, setPhase] = useState<Phase>(AUTO_START_MODE ? "loading" : "intro");
   const [autoStartPending, setAutoStartPending] = useState(!!AUTO_START_MODE);
-  const [mode, setMode] = useState<GameMode>("4v");
+  const [mode, setMode] = useState<GameMode>("5v");
   const [claims, setClaims] = useState<GameClaim[]>([]);
   const [currentRound, setCurrentRound] = useState(0);
   const [score, setScore] = useState(0);

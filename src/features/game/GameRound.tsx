@@ -14,14 +14,15 @@ const TIMER_SECONDS = 15;
 // Verdict helpers
 // ---------------------------------------------------------------------------
 
-const VERDICTS_4V = ["True", "Mostly True", "Misleading", "False"] as const;
+const VERDICTS_5V = ["True", "Mostly True", "Mixed", "Mostly False", "False"] as const;
 const VERDICTS_TF = ["True", "False"] as const;
-type Verdict = "True" | "Mostly True" | "Misleading" | "False";
+type Verdict = "True" | "Mostly True" | "Mixed" | "Mostly False" | "False";
 
 const VERDICT_TO_VOTE: Record<string, VoteValue> = {
   True: "true",
   "Mostly True": "mostly_true",
-  Misleading: "misleading",
+  Mixed: "mixed",
+  "Mostly False": "mostly_false",
   False: "false",
 };
 
@@ -43,12 +44,19 @@ const VERDICT_STYLES: Record<
     ring: "ring-mostly-true/40",
     dot: "bg-mostly-true",
   },
-  Misleading: {
-    bg: "bg-misleading/10",
-    bgHover: "hover:bg-misleading/20",
-    text: "text-misleading",
-    ring: "ring-misleading/40",
-    dot: "bg-misleading",
+  Mixed: {
+    bg: "bg-mixed/10",
+    bgHover: "hover:bg-mixed/20",
+    text: "text-mixed",
+    ring: "ring-mixed/40",
+    dot: "bg-mixed",
+  },
+  "Mostly False": {
+    bg: "bg-mostly-false/10",
+    bgHover: "hover:bg-mostly-false/20",
+    text: "text-mostly-false",
+    ring: "ring-mostly-false/40",
+    dot: "bg-mostly-false",
   },
   False: {
     bg: "bg-false/10",
@@ -99,7 +107,7 @@ export default function GameRound({
   onAnswer,
   onNext,
 }: GameRoundProps) {
-  const verdicts = mode === "tf" ? VERDICTS_TF : VERDICTS_4V;
+  const verdicts = mode === "tf" ? VERDICTS_TF : VERDICTS_5V;
   const [phase, setPhase] = useState<"guess" | "reveal">("guess");
   const [guess, setGuess] = useState<string | null>(null);
   const [pointsEarned, setPointsEarned] = useState(0);
@@ -136,7 +144,7 @@ export default function GameRound({
         claimIndex: roundNumber - 1,
         guess: "Timed out",
         correct: claim.conclusion_label,
-        distance: 3,
+        distance: mode === "tf" ? 1 : 4,
         points: 0,
         streakBonus: 0,
       });
@@ -145,7 +153,7 @@ export default function GameRound({
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [phase, claim, roundNumber, onAnswer]);
+  }, [phase, claim, roundNumber, onAnswer, mode]);
 
   const handleGuess = useCallback(
     (v: Verdict) => {
@@ -241,7 +249,8 @@ export default function GameRound({
               const r = results[i];
               if (r.distance === 0) bg = "bg-true";
               else if (r.distance === 1) bg = "bg-mostly-true";
-              else if (r.distance === 2) bg = "bg-misleading";
+              else if (r.distance === 2) bg = "bg-mixed";
+              else if (r.distance === 3) bg = "bg-mostly-false";
               else bg = "bg-false";
             } else if (i === roundNumber - 1) {
               bg = "bg-primary";
@@ -349,7 +358,7 @@ export default function GameRound({
                   : pointsEarned >= 50
                     ? "text-mostly-true"
                     : pointsEarned >= 25
-                      ? "text-misleading"
+                      ? "text-mixed"
                       : "text-false"
               }`}
             >

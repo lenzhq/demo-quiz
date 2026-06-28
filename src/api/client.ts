@@ -17,8 +17,8 @@ export interface GameClaim {
   completed_at: string | null;
 }
 
-export type GameMode = "tf" | "4v" | "ooo";
-export type VoteValue = "true" | "mostly_true" | "misleading" | "false";
+export type GameMode = "tf" | "5v" | "ooo";
+export type VoteValue = "true" | "mostly_true" | "mixed" | "mostly_false" | "false";
 
 // ---------------------------------------------------------------------------
 // Fetch helpers — timeout and retry
@@ -90,12 +90,20 @@ async function fetchWithRetry(
 // Game API
 // ---------------------------------------------------------------------------
 
-export async function fetchGameClaims(count = 10, mode: GameMode = "4v"): Promise<GameClaim[]> {
+// Normalize the legacy 'Misleading' label to 'Mixed' for any claim served from
+// a cache that predates the 5-point migration, so all downstream verdict maps
+// (styles, colors, displayed text) resolve correctly.
+function normalizeClaim(c: GameClaim): GameClaim {
+  return c.conclusion_label === "Misleading" ? { ...c, conclusion_label: "Mixed" } : c;
+}
+
+export async function fetchGameClaims(count = 10, mode: GameMode = "5v"): Promise<GameClaim[]> {
   const res = await deduplicatedFetch(`${API_BASE}/game/claims?count=${count}&mode=${mode}`, {
     credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to fetch game claims");
-  return res.json();
+  const claims: GameClaim[] = await res.json();
+  return claims.map(normalizeClaim);
 }
 
 export async function fetchOddOneOutRounds(count = 7): Promise<GameClaim[][]> {
@@ -103,7 +111,8 @@ export async function fetchOddOneOutRounds(count = 7): Promise<GameClaim[][]> {
     credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to fetch odd-one-out rounds");
-  return res.json();
+  const rounds: GameClaim[][] = await res.json();
+  return rounds.map((r) => r.map(normalizeClaim));
 }
 
 export function recordGameView(shareId: string): void {

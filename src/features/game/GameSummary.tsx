@@ -12,14 +12,16 @@ const LENZ_URL = import.meta.env.VITE_LENZ_URL || "https://lenz.io";
 const VERDICT_TEXT_COLOR: Record<string, string> = {
   True: "text-true",
   "Mostly True": "text-mostly-true",
-  Misleading: "text-misleading",
+  Mixed: "text-mixed",
+  "Mostly False": "text-mostly-false",
   False: "text-false",
 };
 
 const VERDICT_BG: Record<string, string> = {
   True: "bg-true/10",
   "Mostly True": "bg-mostly-true/10",
-  Misleading: "bg-misleading/10",
+  Mixed: "bg-mixed/10",
+  "Mostly False": "bg-mostly-false/10",
   False: "bg-false/10",
 };
 
@@ -31,7 +33,7 @@ const GAME_URL = window.location.origin;
 
 const MODE_LABEL: Record<GameMode, string> = {
   tf: "True or False",
-  "4v": "Four Verdicts",
+  "5v": "Five Verdicts",
   ooo: "Odd One Out",
 };
 
@@ -218,7 +220,7 @@ export default function GameSummary({
                   <li key={i} className="px-5 py-3 flex items-start gap-3">
                     <span
                       className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-cream mt-0.5
-                        ${r.distance === 0 ? "bg-true" : r.distance === 1 ? "bg-mostly-true" : r.distance === 2 ? "bg-misleading" : "bg-false"}`}
+                        ${r.distance === 0 ? "bg-true" : r.distance === 1 ? "bg-mostly-true" : r.distance === 2 ? "bg-mixed" : r.distance === 3 ? "bg-mostly-false" : "bg-false"}`}
                     >
                       {r.distance === 0 ? "\u2713" : r.distance}
                     </span>
