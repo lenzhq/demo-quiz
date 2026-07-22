@@ -80,7 +80,7 @@ function shuffle<T>(arr: T[]): T[] {
 // `tf` restricts to exactly-True / exactly-False verdicts.
 export async function fetchGameClaims(count = 10, mode: GameMode = "5v"): Promise<GameClaim[]> {
   const verdict = mode === "tf" ? "True,False" : undefined;
-  const page = await client.library.list({ curated: true, sort: "random", verdict });
+  const page = await client.library.list({ curated: ["trivia"], sort: "random", verdict });
   return page.items.slice(0, count).map(mapItem);
 }
 
@@ -88,8 +88,8 @@ export async function fetchGameClaims(count = 10, mode: GameMode = "5v"): Promis
 // shuffled pool of each verdict and assemble the rounds client-side.
 export async function fetchOddOneOutRounds(count = 7): Promise<GameClaim[][]> {
   const [truePool, falsePool] = await Promise.all([
-    client.library.list({ curated: true, sort: "random", verdict: "True" }),
-    client.library.list({ curated: true, sort: "random", verdict: "False" }),
+    client.library.list({ curated: ["trivia"], sort: "random", verdict: "True" }),
+    client.library.list({ curated: ["trivia"], sort: "random", verdict: "False" }),
   ]);
   const trues = truePool.items.map(mapItem);
   const falses = falsePool.items.map(mapItem);

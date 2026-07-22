@@ -5,7 +5,10 @@
 # Prerequisites:
 #   - Firebase CLI installed: npm install -g firebase-tools
 #   - Logged in: firebase login
-#   - Firebase site "lenz-play" created in project "lenz-prod"
+#   - A Firebase project + a hosting "target" named "app":
+#       firebase use --add                           # pick/alias your project
+#       firebase target:apply hosting app <site>     # map the "app" target
+#     (Project/site live in a local, gitignored .firebaserc — not in this repo.)
 #
 # Usage:
 #   bash deploy/deploy.sh

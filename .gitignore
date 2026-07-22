@@ -1,6 +1,12 @@
 node_modules
 dist
 .env
+.env.*
+!.env.example
 *.local
 .claude/
 .firebase/
+
+# Local-only (kept out of the public repo)
+CLAUDE.md
+.firebaserc

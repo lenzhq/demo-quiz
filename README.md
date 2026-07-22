@@ -19,7 +19,7 @@ const lenz = new Lenz(); // no API key — the library reads are public
 
 // A round of true/false quiz claims, curated and shuffled:
 const round = await lenz.library.list({
-  curated: true,          // LLM-curated, trivia-worthy subset
+  curated: ["trivia"],    // named curated collections
   sort: "random",         // shuffled
   verdict: "True,False",  // filter by verdict label
 });
@@ -55,6 +55,18 @@ Zero config — it defaults to the production public API. Optional overrides are
 
 React 19 + TypeScript + Vite + Tailwind. The `lenz-io` SDK is isomorphic, so this same code
 runs in the browser, Node, Deno, and edge runtimes.
+
+## Deploy
+
+It's a plain Vite build (`npm run build` → `dist/`) — host it anywhere static. The included
+`firebase.json` deploys to a Firebase Hosting **target** named `app`; point it at your own
+project/site once:
+
+```bash
+firebase use --add                        # pick your Firebase project
+firebase target:apply hosting app <site>  # map the "app" target to your site
+bash deploy/deploy.sh
+```
 
 ## License
 

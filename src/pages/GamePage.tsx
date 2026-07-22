@@ -235,20 +235,7 @@ export default function GamePage() {
     <>
       <Helmet>
         <title>Fact or Fiction | Lenz</title>
-        <meta
-          name="description"
-          content="Can you tell fact from fiction? Test your instincts on real verified claims."
-        />
-        <meta property="og:title" content="Fact or Fiction | Lenz" />
-        <meta
-          property="og:description"
-          content="Can you tell fact from fiction? Test your instincts on real verified claims."
-        />
-        <meta property="og:image" content="https://play.lenz.io/play-og-image.png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://play.lenz.io/play-og-image.png" />
+        <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
       {!IS_EMBEDDED && (
