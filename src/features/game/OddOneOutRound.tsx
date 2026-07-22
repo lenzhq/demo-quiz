@@ -64,7 +64,7 @@ export default function OddOneOutRound({
   const [focusedIndex, setFocusedIndex] = useState(0);
   const [keyboardActive, setKeyboardActive] = useState(false);
 
-  const falseIndex = claims.findIndex((c) => c.conclusion_label.toLowerCase() === "false");
+  const falseIndex = claims.findIndex((c) => c.verdict.toLowerCase() === "false");
 
   // Reset start time on mount
   useEffect(() => {
@@ -209,7 +209,7 @@ export default function OddOneOutRound({
       {/* Claim cards */}
       <div className="flex flex-col gap-3 mb-4">
         {claims.map((claim, idx) => {
-          const isFalse = claim.conclusion_label.toLowerCase() === "false";
+          const isFalse = claim.verdict.toLowerCase() === "false";
           const isSelected = selectedIndex === idx;
           const isFocused = keyboardActive && focusedIndex === idx && phase === "guess";
 
@@ -228,7 +228,7 @@ export default function OddOneOutRound({
 
           return (
             <button
-              key={claim.share_id}
+              key={claim.verification_id}
               onClick={() => phase === "guess" && handleSelect(idx)}
               disabled={phase !== "guess"}
               tabIndex={isFocused ? 0 : -1}
@@ -260,9 +260,9 @@ export default function OddOneOutRound({
                         {claim.domain}
                       </span>
                     )}
-                    {claim.completed_at && (
+                    {claim.created_at && (
                       <span className="text-[10px] text-warm-400 font-medium">
-                        {new Date(claim.completed_at).toLocaleDateString(undefined, {
+                        {new Date(claim.created_at).toLocaleDateString(undefined, {
                           year: "numeric",
                           month: "short",
                           day: "numeric",

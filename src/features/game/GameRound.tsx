@@ -127,7 +127,7 @@ export default function GameRound({
       onAnswer({
         claimIndex: roundNumber - 1,
         guess: "Timed out",
-        correct: claim.conclusion_label,
+        correct: claim.verdict,
         distance: mode === "tf" ? 1 : 4,
         points: 0,
         streakBonus: 0,
@@ -146,7 +146,7 @@ export default function GameRound({
       // Cancel the auto-timeout timer
       if (timerRef.current) clearTimeout(timerRef.current);
 
-      const correct = claim.conclusion_label;
+      const correct = claim.verdict;
       const d = verdictDistance(v, correct);
       const base = scoreForDistance(d, mode);
       const bonus = d === 0 && streak > 0 ? streak * 10 : 0;
@@ -207,7 +207,7 @@ export default function GameRound({
     return () => document.removeEventListener("keydown", handler);
   }, [phase, verdicts, focusedIndex, handleGuess]);
 
-  const correctLabel = claim.conclusion_label;
+  const correctLabel = claim.verdict;
   const correctStyle = VERDICT_STYLES[correctLabel as Verdict] ?? VERDICT_STYLES.True;
 
   return (
@@ -252,9 +252,9 @@ export default function GameRound({
               {claim.domain}
             </span>
           )}
-          {claim.completed_at && (
+          {claim.created_at && (
             <span className="text-[11px] text-warm-400 font-medium">
-              {new Date(claim.completed_at).toLocaleDateString(undefined, {
+              {new Date(claim.created_at).toLocaleDateString(undefined, {
                 year: "numeric",
                 month: "short",
                 day: "numeric",
@@ -315,7 +315,7 @@ export default function GameRound({
           {/* Timer bar — synced with TIMER_SECONDS timeout */}
           <div className="h-1 rounded-full bg-warm-100 overflow-hidden mb-6">
             <div
-              key={claim.share_id}
+              key={claim.verification_id}
               className="h-full bg-primary/30 rounded-full"
               style={{
                 width: "100%",

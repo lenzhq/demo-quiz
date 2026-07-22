@@ -3,10 +3,30 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "description": "A trivia game built on the Lenz public API via the lenz-io SDK — an open-source demo.",
+  "homepage": "https://play.lenz.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lenzhq/Lenz-FactOrFiction.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lenzhq/Lenz-FactOrFiction/issues"
+  },
+  "author": "Lenz <support@lenz.io>",
+  "license": "MIT",
+  "keywords": [
+    "lenz",
+    "fact-check",
+    "lenz-io",
+    "sdk-demo",
+    "trivia",
+    "react"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b",
+    "test": "vitest run",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -18,7 +18,7 @@ PROJECT_ROOT="$(dirname "${SCRIPT_DIR}")"
 cd "${PROJECT_ROOT}"
 
 # Production env vars
-VITE_API_BASE="https://lenz.io/api"
+VITE_API_BASE="https://lenz.io/api/v1"
 VITE_LENZ_URL="https://lenz.io"
 
 echo "==> Building Fact or Fiction..."

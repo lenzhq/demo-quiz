@@ -42,11 +42,14 @@ See [`src/api/client.ts`](src/api/client.ts) — that's the entire integration.
 
 ```bash
 npm install
-npm run dev
+npm run dev        # dev server
+npm run build      # production build (typecheck + bundle)
+npm test           # unit tests (scoring)
 ```
 
-It works with zero config (defaults to the production public API). To point at a different
-server, copy `.env.example` to `.env` and set `VITE_API_BASE`.
+Zero config — it defaults to the production public API. Optional overrides are in
+`.env.example`: `VITE_API_BASE` (point at a different server), `VITE_LENZ_URL`, and
+`VITE_GA_ID` (opt into your own GA4 — analytics are off by default).
 
 ## Tech
 

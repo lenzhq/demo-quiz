@@ -294,7 +294,7 @@ export default function GamePage() {
 
         {phase === "playing" && mode !== "ooo" && claims[currentRound] && (
           <GameRound
-            key={claims[currentRound].share_id}
+            key={claims[currentRound].verification_id}
             claim={claims[currentRound]}
             roundNumber={currentRound + 1}
             totalRounds={claims.length}

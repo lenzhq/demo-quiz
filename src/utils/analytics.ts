@@ -1,12 +1,29 @@
 /**
- * Thin wrapper around gtag() for Google Analytics 4 custom events.
- * Safe to call even if gtag hasn't loaded yet (window.gtag may be undefined).
+ * Optional GA4 analytics. Off by default — this open-source demo never phones
+ * home. Set `VITE_GA_ID` to your own measurement id to enable it; with it unset,
+ * gtag is never loaded and `track()` is a no-op.
  */
 
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
   }
+}
+
+export function initAnalytics() {
+  const id = import.meta.env.VITE_GA_ID;
+  if (!id) return;
+  const s = document.createElement("script");
+  s.async = true;
+  s.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = (...args: unknown[]) => {
+    window.dataLayer!.push(args);
+  };
+  window.gtag("js", new Date());
+  window.gtag("config", id);
 }
 
 function track(eventName: string, params?: Record<string, unknown>) {

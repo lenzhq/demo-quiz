@@ -23,16 +23,20 @@ const LENZ_URL = import.meta.env.VITE_LENZ_URL || "https://lenz.io";
 // Types — the shape the game components consume.
 // ---------------------------------------------------------------------------
 
+// The claim shape the game renders — a thin view model over the SDK's
+// `LibraryItem`. Field names mirror the API; `mapItem` centralizes the only
+// three adaptations we need (verdict normalization, a claim-page url, and
+// coalescing the SDK's optional fields).
 export interface GameClaim {
-  share_id: string;
+  verification_id: string;
   atomic_claim: string;
   domain: string;
-  conclusion_label: string;
+  verdict: string;
   lenz_score: number | null;
   executive_summary: string;
-  completed_at: string | null;
-  // Canonical claim page. The library endpoint returns no url/slug, so we
-  // build it from the verification_id (lenz.io/c/<id> resolves via redirect).
+  created_at: string | null;
+  // The library endpoint returns no url, so we build it from the
+  // verification_id (lenz.io/c/<id> resolves to the full result page).
   url: string;
 }
 
@@ -42,19 +46,17 @@ export type GameMode = "tf" | "5v" | "ooo";
 // Mapping + helpers
 // ---------------------------------------------------------------------------
 
-// Map a public-API LibraryItem onto GameClaim. Normalizes the legacy
-// 'Misleading' label to 'Mixed' so downstream verdict maps resolve.
 function mapItem(item: LibraryItem): GameClaim {
-  const verdict = item.verdict === "Misleading" ? "Mixed" : (item.verdict ?? "");
   const id = item.verification_id ?? "";
   return {
-    share_id: id,
+    verification_id: id,
     atomic_claim: item.claim ?? "",
     domain: item.domain ?? "",
-    conclusion_label: verdict,
+    // Normalize the legacy 'Misleading' label to 'Mixed' (5-point scale).
+    verdict: item.verdict === "Misleading" ? "Mixed" : (item.verdict ?? ""),
     lenz_score: item.lenz_score ?? null,
     executive_summary: item.executive_summary ?? "",
-    completed_at: item.created_at ?? null,
+    created_at: item.created_at ?? null,
     url: `${LENZ_URL}/c/${id}`,
   };
 }
