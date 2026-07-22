@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { GameClaim, GameMode, VoteValue } from "../../api/client";
-import { recordGameView, submitGameVotes } from "../../api/client";
+import type { GameClaim, GameMode } from "../../api/client";
 import { renderEmphasis } from "../../utils/renderEmphasis";
 import { verdictDistance, scoreForDistance } from "../../utils/scoring";
 
@@ -17,14 +16,6 @@ const TIMER_SECONDS = 15;
 const VERDICTS_5V = ["True", "Mostly True", "Mixed", "Mostly False", "False"] as const;
 const VERDICTS_TF = ["True", "False"] as const;
 type Verdict = "True" | "Mostly True" | "Mixed" | "Mostly False" | "False";
-
-const VERDICT_TO_VOTE: Record<string, VoteValue> = {
-  True: "true",
-  "Mostly True": "mostly_true",
-  Mixed: "mixed",
-  "Mostly False": "mostly_false",
-  False: "false",
-};
 
 const VERDICT_STYLES: Record<
   Verdict,
@@ -120,13 +111,6 @@ export default function GameRound({
   const [focusedIndex, setFocusedIndex] = useState(0);
   const [keyboardActive, setKeyboardActive] = useState(false);
 
-  // Record view when the executive summary is shown
-  useEffect(() => {
-    if (showSummary && claim.executive_summary) {
-      recordGameView(claim.share_id);
-    }
-  }, [showSummary, claim.share_id, claim.executive_summary]);
-
   // Timer: auto-timeout after TIMER_SECONDS during guess phase
   useEffect(() => {
     if (phase !== "guess") return;
@@ -190,12 +174,6 @@ export default function GameRound({
         points: base,
         streakBonus: bonus,
       });
-
-      // Submit implicit vote based on the user's guess
-      const voteValue = VERDICT_TO_VOTE[v];
-      if (voteValue) {
-        submitGameVotes([{ share_id: claim.share_id, value: voteValue }]);
-      }
     },
     [phase, claim, streak, roundNumber, onAnswer, mode],
   );

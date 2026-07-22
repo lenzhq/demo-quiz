@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { GameClaim } from "../../api/client";
-import { recordGameView, submitGameVotes } from "../../api/client";
 import { renderEmphasis } from "../../utils/renderEmphasis";
 
 // ---------------------------------------------------------------------------
@@ -66,15 +65,6 @@ export default function OddOneOutRound({
   const [keyboardActive, setKeyboardActive] = useState(false);
 
   const falseIndex = claims.findIndex((c) => c.conclusion_label.toLowerCase() === "false");
-
-  // Record view only for the false claim when its executive summary is shown
-  useEffect(() => {
-    if (!showDetails) return;
-    const falseClaim = claims[falseIndex];
-    if (falseClaim?.executive_summary) {
-      recordGameView(falseClaim.share_id);
-    }
-  }, [showDetails, claims, falseIndex]);
 
   // Reset start time on mount
   useEffect(() => {
@@ -151,14 +141,6 @@ export default function OddOneOutRound({
         streakBonus: sb,
         timeElapsed: Math.round(elapsed * 10) / 10,
       });
-
-      // Submit implicit votes: selected claim → "false", others → "true"
-      submitGameVotes(
-        claims.map((c, i) => ({
-          share_id: c.share_id,
-          value: i === idx ? ("false" as const) : ("true" as const),
-        })),
-      );
     },
     [phase, falseIndex, streak, roundNumber, onAnswer, claims],
   );
