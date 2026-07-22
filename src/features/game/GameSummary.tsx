@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import type { GameClaim, GameMode } from "../../api/client";
 import type { RoundResult } from "./GameRound";
 import type { OddOneOutResult } from "./OddOneOutRound";
-import { claimPath } from "../../utils/slugify";
 import { getTier, type Tier } from "../../utils/scoring";
 import ShareLinks from "../../components/ShareLinks";
 
@@ -226,7 +225,7 @@ export default function GameSummary({
                     </span>
                     <div className="flex-1 min-w-0">
                       <a
-                        href={claimPath(claim?.slug ?? "")}
+                        href={claim?.url ?? ""}
                         className="text-sm text-warm-700 leading-snug hover:text-primary hover:underline transition-colors block"
                       >
                         {claim?.atomic_claim}

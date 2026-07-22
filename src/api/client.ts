@@ -1,145 +1,102 @@
-import { getCSRFToken } from "./utils";
-
-const API_BASE = import.meta.env.VITE_API_BASE || "/api";
+import { Lenz } from "lenz-io";
+import type { LibraryItem } from "lenz-io";
 
 // ---------------------------------------------------------------------------
-// Types
+// Lenz public API client
+//
+// This whole game runs on the KEYLESS public API (`GET /api/v1/library`) via
+// the official `lenz-io` SDK — no API key, no cookies, no server of our own.
+// That's the point of the demo: everything here is reproducible by any
+// developer against the same public endpoints.
+//
+// `VITE_API_BASE` lets a fork point at a local/staging server; it defaults to
+// production so a fresh clone works with zero config.
+// ---------------------------------------------------------------------------
+
+const client = new Lenz({
+  baseUrl: import.meta.env.VITE_API_BASE || "https://lenz.io/api/v1",
+});
+
+const LENZ_URL = import.meta.env.VITE_LENZ_URL || "https://lenz.io";
+
+// ---------------------------------------------------------------------------
+// Types — the shape the game components consume.
 // ---------------------------------------------------------------------------
 
 export interface GameClaim {
   share_id: string;
-  slug: string;
   atomic_claim: string;
   domain: string;
   conclusion_label: string;
   lenz_score: number | null;
   executive_summary: string;
   completed_at: string | null;
+  // Canonical claim page. The library endpoint returns no url/slug, so we
+  // build it from the verification_id (lenz.io/c/<id> resolves via redirect).
+  url: string;
 }
 
 export type GameMode = "tf" | "5v" | "ooo";
-export type VoteValue = "true" | "mostly_true" | "mixed" | "mostly_false" | "false";
 
 // ---------------------------------------------------------------------------
-// Fetch helpers — timeout and retry
+// Mapping + helpers
 // ---------------------------------------------------------------------------
 
-const DEFAULT_TIMEOUT_MS = 30_000;
-
-function fetchWithTimeout(
-  input: RequestInfo | URL,
-  init?: RequestInit,
-  timeoutMs = DEFAULT_TIMEOUT_MS,
-): Promise<Response> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  const signal = init?.signal
-    ? init.signal
-    : controller.signal;
-  return fetch(input, { ...init, signal }).finally(() => clearTimeout(timer));
+// Map a public-API LibraryItem onto GameClaim. Normalizes the legacy
+// 'Misleading' label to 'Mixed' so downstream verdict maps resolve.
+function mapItem(item: LibraryItem): GameClaim {
+  const verdict = item.verdict === "Misleading" ? "Mixed" : (item.verdict ?? "");
+  const id = item.verification_id ?? "";
+  return {
+    share_id: id,
+    atomic_claim: item.claim ?? "",
+    domain: item.domain ?? "",
+    conclusion_label: verdict,
+    lenz_score: item.lenz_score ?? null,
+    executive_summary: item.executive_summary ?? "",
+    completed_at: item.created_at ?? null,
+    url: `${LENZ_URL}/c/${id}`,
+  };
 }
 
-// ---------------------------------------------------------------------------
-// GET request deduplication
-// ---------------------------------------------------------------------------
-
-const MAX_INFLIGHT = 20;
-const _inflight = new Map<string, Promise<Response>>();
-
-function deduplicatedFetch(
-  input: string,
-  init?: RequestInit,
-  opts?: { retries?: number; timeoutMs?: number },
-): Promise<Response> {
-  const method = init?.method?.toUpperCase() || "GET";
-  if (method !== "GET") return fetchWithRetry(input, init, opts);
-
-  const existing = _inflight.get(input);
-  if (existing) return existing.then((r) => r.clone());
-
-  // Safety bound: clear stale entries if the map grows too large
-  if (_inflight.size >= MAX_INFLIGHT) _inflight.clear();
-
-  const promise = fetchWithRetry(input, init, opts).finally(() => _inflight.delete(input));
-  _inflight.set(input, promise);
-  return promise;
-}
-
-async function fetchWithRetry(
-  input: RequestInfo | URL,
-  init?: RequestInit,
-  { retries = 2, timeoutMs = DEFAULT_TIMEOUT_MS } = {},
-): Promise<Response> {
-  let lastError: unknown;
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      const res = await fetchWithTimeout(input, init, timeoutMs);
-      if (res.ok || res.status < 500) return res;
-      lastError = new Error(`Server error (${res.status})`);
-    } catch (err) {
-      lastError = err;
-    }
-    if (attempt < retries) {
-      await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
-    }
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = a[i]!;
+    a[i] = a[j]!;
+    a[j] = tmp;
   }
-  throw lastError;
+  return a;
 }
 
 // ---------------------------------------------------------------------------
-// Game API
+// Game API — composed from library.list()
 // ---------------------------------------------------------------------------
 
-// Normalize the legacy 'Misleading' label to 'Mixed' for any claim served from
-// a cache that predates the 5-point migration, so all downstream verdict maps
-// (styles, colors, displayed text) resolve correctly.
-function normalizeClaim(c: GameClaim): GameClaim {
-  return c.conclusion_label === "Misleading" ? { ...c, conclusion_label: "Mixed" } : c;
-}
-
+// True/False and Five-Verdict rounds: a curated, shuffled page of claims.
+// `tf` restricts to exactly-True / exactly-False verdicts.
 export async function fetchGameClaims(count = 10, mode: GameMode = "5v"): Promise<GameClaim[]> {
-  const res = await deduplicatedFetch(`${API_BASE}/game/claims?count=${count}&mode=${mode}`, {
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Failed to fetch game claims");
-  const claims: GameClaim[] = await res.json();
-  return claims.map(normalizeClaim);
+  const verdict = mode === "tf" ? "True,False" : undefined;
+  const page = await client.library.list({ curated: true, sort: "random", verdict });
+  return page.items.slice(0, count).map(mapItem);
 }
 
+// Odd-One-Out: each round is 2 true + 1 false, shuffled. Fetch a curated,
+// shuffled pool of each verdict and assemble the rounds client-side.
 export async function fetchOddOneOutRounds(count = 7): Promise<GameClaim[][]> {
-  const res = await deduplicatedFetch(`${API_BASE}/game/odd-one-out?rounds=${count}`, {
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Failed to fetch odd-one-out rounds");
-  const rounds: GameClaim[][] = await res.json();
-  return rounds.map((r) => r.map(normalizeClaim));
-}
+  const [truePool, falsePool] = await Promise.all([
+    client.library.list({ curated: true, sort: "random", verdict: "True" }),
+    client.library.list({ curated: true, sort: "random", verdict: "False" }),
+  ]);
+  const trues = truePool.items.map(mapItem);
+  const falses = falsePool.items.map(mapItem);
 
-export function recordGameView(shareId: string): void {
-  fetchWithTimeout(
-    `${API_BASE}/game/view/${shareId}`,
-    {
-      method: "POST",
-      headers: { "X-CSRFToken": getCSRFToken() },
-      credentials: "include",
-    },
-    10_000,
-  ).catch(() => {});
-}
-
-export function submitGameVotes(votes: { share_id: string; value: VoteValue }[]): void {
-  if (!votes.length) return;
-  fetchWithTimeout(
-    `${API_BASE}/game/vote`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": getCSRFToken(),
-      },
-      credentials: "include",
-      body: JSON.stringify({ votes }),
-    },
-    10_000,
-  ).catch(() => {});
+  // Bounded by the smaller pool so we never index past what the API returned.
+  const maxRounds = Math.min(count, Math.floor(trues.length / 2), falses.length);
+  const rounds: GameClaim[][] = [];
+  for (let i = 0; i < maxRounds; i++) {
+    rounds.push(shuffle([trues[i * 2]!, trues[i * 2 + 1]!, falses[i]!]));
+  }
+  return rounds;
 }
