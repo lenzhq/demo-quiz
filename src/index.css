@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+  --color-cream: #fffdf7;
+  --color-warm-50: #faf8f5;
+  --color-warm-100: #f3f0eb;
+  --color-warm-200: #e8e4dd;
+  --color-warm-300: #d4cfc6;
+  --color-warm-400: #6f6a64;
+  --color-warm-500: #635e59;
+  --color-warm-600: #5c5751;
+  --color-warm-700: #3d3935;
+  --color-warm-800: #2a2724;
+  --color-warm-900: #1a1816;
+  --color-primary: #4B7BE5;
+  --color-primary-hover: #3D65BC;
+  --color-primary-text: #3D65BC;
+  --color-surface: #FFFFFF;
+  --color-true: #14783a;
+  --color-true-bg: #f0fdf4;
+  --color-mostly-true: #a16207;
+  --color-mostly-true-bg: #fefce8;
+  --color-mixed: #635e59;
+  --color-mixed-bg: #f5f5f4;
+  --color-mostly-false: #c2410c;
+  --color-mostly-false-bg: #fff7ed;
+  /* Legacy alias (pre-5-point) so any unconverted class still resolves. */
+  --color-misleading: #635e59;
+  --color-misleading-bg: #f5f5f4;
+  --color-false: #b91c1c;
+  --color-false-bg: #fef2f2;
+  --color-confetti-purple: #7C3AED;
+  --color-confetti-pink: #EC4899;
+  --shadow-sm: 0 1px 2px rgba(28,25,23,0.04);
+  --shadow-md: 0 2px 8px rgba(28,25,23,0.06), 0 1px 2px rgba(28,25,23,0.04);
+  --shadow-lg: 0 4px 16px rgba(28,25,23,0.08), 0 2px 4px rgba(28,25,23,0.04);
+}
+
+/* ── Dark mode ── */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --color-cream: #1A1816;
+  --color-warm-50: #211F1C;
+  --color-warm-100: #353230;
+  --color-warm-200: #3D3935;
+  --color-warm-300: #5C5751;
+  --color-warm-400: #A8A29E;
+  --color-warm-500: #D4CFC6;
+  --color-warm-600: #E8E4DD;
+  --color-warm-700: #F3F0EB;
+  --color-warm-800: #FAF8F5;
+  --color-warm-900: #FFFDF7;
+  --color-primary: #7BA3F0;
+  --color-primary-hover: #9BBBF5;
+  --color-primary-text: #7BA3F0;
+  --color-surface: #2A2724;
+  --color-true: #4ADE80;
+  --color-true-bg: rgba(74,222,128,0.08);
+  --color-mostly-true: #FBBF24;
+  --color-mostly-true-bg: rgba(251,191,36,0.08);
+  --color-false: #F87171;
+  --color-false-bg: rgba(248,113,113,0.08);
+  --color-mixed: #A8A29E;
+  --color-mixed-bg: rgba(168,162,158,0.08);
+  --color-mostly-false: #FB923C;
+  --color-mostly-false-bg: rgba(251,146,60,0.08);
+  --color-misleading: #A8A29E;
+  --color-misleading-bg: rgba(168,162,158,0.08);
+  --color-confetti-purple: #A78BFA;
+  --color-confetti-pink: #F9A8D4;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* ── App-feel ── */
+html { overscroll-behavior-y: none; }
+button, a {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-cream);
+  color: var(--color-warm-800);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus-visible styles for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
