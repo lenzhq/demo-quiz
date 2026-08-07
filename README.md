@@ -74,4 +74,4 @@ MIT — see [LICENSE](LICENSE).
 
 ## Maintainer
 
-[@Pavel12431432](https://github.com/Pavel12431432)
+[@David19782](https://github.com/David19782)
