@@ -71,3 +71,7 @@ bash deploy/deploy.sh
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+## Maintainer
+
+[@Pavel12431432](https://github.com/Pavel12431432)
