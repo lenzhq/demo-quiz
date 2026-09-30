@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { GameClaim } from "../../api/client";
 import { renderEmphasis } from "../../utils/renderEmphasis";
+import RoundProgress from "../../components/RoundProgress";
+import Countdown from "../../components/Countdown";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -171,60 +173,31 @@ export default function OddOneOutRound({
     return () => document.removeEventListener("keydown", handler);
   }, [phase, focusedIndex, handleSelect]);
 
-  const totalPoints = pointsEarned + timeBonus + streakBonusEarned;
-
   return (
-    <div className="w-full max-w-2xl mx-auto px-4">
-      {/* Progress bar */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-semibold text-warm-500">
-            Round {roundNumber} of {totalRounds}
-          </span>
-          <span className="text-xs font-bold text-primary-text">{score} pts</span>
-        </div>
-        <div className="flex gap-1">
-          {Array.from({ length: totalRounds }).map((_, i) => {
-            let bg = "bg-warm-200";
-            if (i < results.length) {
-              bg = results[i].correct ? "bg-true" : "bg-false";
-            } else if (i === roundNumber - 1) {
-              bg = "bg-primary";
-            }
-            return (
-              <div
-                key={i}
-                className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${bg}`}
-              />
-            );
-          })}
-        </div>
-      </div>
+    <div className="ff-col">
+      <RoundProgress
+        roundNumber={roundNumber}
+        totalRounds={totalRounds}
+        score={score}
+        doneCount={results.length}
+      />
 
       {/* Heading */}
-      {phase === "guess" && (
-        <p className="text-center text-sm font-bold text-false mb-4">Which claim is FALSE?</p>
-      )}
+      {phase === "guess" && <h2 className="ff-title ff-title--q">Which claim is FALSE?</h2>}
 
       {/* Claim cards */}
-      <div className="flex flex-col gap-3 mb-4">
+      <div className="flex flex-col gap-3 mb-6">
         {claims.map((claim, idx) => {
           const isFalse = claim.verdict.toLowerCase() === "false";
           const isSelected = selectedIndex === idx;
           const isFocused = keyboardActive && focusedIndex === idx && phase === "guess";
 
-          let borderClass = "border border-warm-200";
-          let accentColor = "";
-          if (phase === "reveal") {
-            if (isSelected) {
-              borderClass = isFalse ? "border-2 border-false" : "border-2 border-true";
-            } else {
-              borderClass = isFalse ? "border border-false/40" : "border border-true/40";
-            }
-            accentColor = isFalse ? "bg-false" : "bg-true";
-          } else if (isFocused) {
-            borderClass = "border border-warm-400 ring-2 ring-primary/30";
-          }
+          const stateClass =
+            phase === "reveal"
+              ? `${isFalse ? "is-false" : "is-true"}${isSelected ? " is-picked" : ""}`
+              : isFocused
+                ? "is-focused"
+                : "";
 
           return (
             <button
@@ -232,59 +205,40 @@ export default function OddOneOutRound({
               onClick={() => phase === "guess" && handleSelect(idx)}
               disabled={phase !== "guess"}
               tabIndex={isFocused ? 0 : -1}
-              className={`relative rounded-xl overflow-hidden ${borderClass} bg-surface text-left
-                         transition-all cursor-pointer
-                         ${phase === "guess" ? "hover:border-warm-400 hover:shadow-md hover:scale-[1.01] active:scale-[0.99] active:bg-warm-50" : ""}
-                         disabled:cursor-default`}
+              className={`ff-artefact ${stateClass}`}
             >
-              {/* Left accent bar — reveal only */}
-              {accentColor && <div className={`absolute left-0 inset-y-0 w-1 ${accentColor}`} />}
-              <div className="p-4 flex items-start gap-3">
-                {/* Number badge */}
-                <span
-                  className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black mt-0.5
-                    ${phase === "reveal" && isFalse ? "bg-false/10 text-false" : phase === "reveal" ? "bg-true/10 text-true" : "bg-warm-100 text-warm-500"}`}
-                >
-                  {idx + 1}
-                </span>
+              <div className="ff-claim">
+                <span className="ff-claim__n">{String(idx + 1).padStart(2, "0")}</span>
 
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm sm:text-base font-medium text-warm-800 leading-snug">
-                    {claim.atomic_claim}
-                  </p>
+                <div className="min-w-0">
+                  <p className="ff-claim__text">{claim.atomic_claim}</p>
 
                   {/* Domain + date */}
-                  <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                    {claim.domain && (
-                      <span className="inline-flex items-center rounded-full bg-primary/8 px-2 py-0.5 text-[10px] font-semibold text-primary-text">
-                        {claim.domain}
-                      </span>
-                    )}
-                    {claim.created_at && (
-                      <span className="text-[10px] text-warm-400 font-medium">
-                        {new Date(claim.created_at).toLocaleDateString(undefined, {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })}
-                      </span>
-                    )}
-                  </div>
+                  {(claim.domain || claim.created_at) && (
+                    <p className="ff-eyebrow ff-claim__meta">
+                      {[
+                        claim.domain,
+                        claim.created_at
+                          ? new Date(claim.created_at).toLocaleDateString(undefined, {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            })
+                          : null,
+                      ]
+                        .filter(Boolean)
+                        .join(" \u00b7 ")}
+                    </p>
+                  )}
 
-                  {/* Reveal: badge + summary */}
+                  {/* Reveal: verdict + summary */}
                   {phase === "reveal" && (
-                    <div className="mt-2 animate-[fadeIn_0.3s_ease-out]">
-                      <span
-                        className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold
-                          ${isFalse ? "bg-false/10 text-false" : "bg-true/10 text-true"}`}
-                      >
-                        <span
-                          className={`w-1.5 h-1.5 rounded-full ${isFalse ? "bg-false" : "bg-true"}`}
-                        />
+                    <div className="mt-3 animate-[fadeIn_0.3s_ease-out]">
+                      <span className={`ff-verdict ${isFalse ? "ff-verdict--false" : "ff-verdict--true"}`}>
                         {isFalse ? "FALSE" : "TRUE"}
                       </span>
                       {isFalse && showDetails && claim.executive_summary && (
-                        <p className="mt-1.5 text-xs text-warm-500 leading-relaxed line-clamp-3">
+                        <p className="ff-claim__why line-clamp-3">
                           {renderEmphasis(claim.executive_summary)}
                         </p>
                       )}
@@ -293,27 +247,29 @@ export default function OddOneOutRound({
                 </div>
 
                 {/* Selection indicator in reveal */}
-                {phase === "reveal" && isSelected && (
-                  <span className="shrink-0 mt-0.5 animate-[fadeIn_0.3s_ease-out]">
-                    {isSelected && idx === falseIndex ? (
-                      <svg className="w-5 h-5 text-true" viewBox="0 0 20 20" fill="currentColor">
-                        <path
-                          fillRule="evenodd"
-                          d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    ) : (
-                      <svg className="w-5 h-5 text-false" viewBox="0 0 20 20" fill="currentColor">
-                        <path
-                          fillRule="evenodd"
-                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    )}
-                  </span>
-                )}
+                <span className="ff-claim__mark">
+                  {phase === "reveal" && isSelected && (
+                    <span className="animate-[fadeIn_0.3s_ease-out]">
+                      {isSelected && idx === falseIndex ? (
+                        <svg className="text-true" viewBox="0 0 20 20" fill="currentColor">
+                          <path
+                            fillRule="evenodd"
+                            d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      ) : (
+                        <svg className="text-false" viewBox="0 0 20 20" fill="currentColor">
+                          <path
+                            fillRule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      )}
+                    </span>
+                  )}
+                </span>
               </div>
             </button>
           );
@@ -323,55 +279,33 @@ export default function OddOneOutRound({
       {/* Guess phase: keyboard hint + timer */}
       {phase === "guess" && (
         <>
-          <p className="text-[10px] text-warm-300 text-center mb-2 hidden sm:block">
+          <p className="ff-hint hidden sm:block">
             Use arrow keys to navigate, Enter to select, or press 1-3
           </p>
-          <div className="h-1 rounded-full bg-warm-100 overflow-hidden mb-6">
-            <div
-              key={`timer-${roundNumber}`}
-              className="h-full bg-false/30 rounded-full"
-              style={{
-                width: "100%",
-                animation: `timerShrink ${TIMER_SECONDS}s linear forwards`,
-              }}
-            />
-          </div>
+          <Countdown key={`timer-${roundNumber}`} seconds={TIMER_SECONDS} />
         </>
       )}
 
       {/* Reveal phase: feedback + next */}
       {phase === "reveal" && (
         <div className="mb-6">
-          <div className="flex items-center justify-center gap-x-3 gap-y-1 flex-wrap mb-4 animate-[fadeIn_0.3s_ease-out]">
-            <span
-              className={`text-lg font-extrabold ${totalPoints > 0 ? "text-true" : "text-false"}`}
-            >
-              {feedbackMsg}
-            </span>
-            <span
-              className={`text-2xl font-black animate-[bounceIn_0.5s_ease-out] ${totalPoints > 0 ? "text-true" : "text-warm-600"}`}
-            >
-              +{pointsEarned}
-            </span>
+          <div className="ff-result animate-[fadeIn_0.3s_ease-out]">
+            <span className="ff-result__msg">{feedbackMsg}</span>
+            <span className="ff-score ff-result__pts">+{pointsEarned}</span>
             {timeBonus > 0 && (
-              <span className="text-sm font-bold text-mostly-true animate-[fadeIn_0.5s_ease-out_0.2s_both]">
+              <span className="ff-result__bonus animate-[fadeIn_0.5s_ease-out_0.2s_both]">
                 +{timeBonus} speed
               </span>
             )}
             {streakBonusEarned > 0 && (
-              <span className="text-sm font-bold text-primary-text animate-[fadeIn_0.5s_ease-out_0.2s_both]">
+              <span className="ff-result__bonus animate-[fadeIn_0.5s_ease-out_0.2s_both]">
                 +{streakBonusEarned} streak!
               </span>
             )}
           </div>
 
-          <div className="flex justify-center">
-            <button
-              onClick={onNext}
-              className="rounded-xl bg-primary px-6 py-3 text-cream font-bold text-sm
-                         hover:bg-primary-hover active:scale-[0.97] transition-all
-                         shadow-md shadow-primary/15 cursor-pointer"
-            >
+          <div className="ff-actions">
+            <button onClick={onNext} className="ff-btn ff-btn--primary">
               {roundNumber < totalRounds ? "Next Round" : "See Results"}
             </button>
           </div>

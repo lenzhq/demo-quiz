@@ -14,6 +14,8 @@ import GameSummary from "../features/game/GameSummary";
 const LENZ_URL = import.meta.env.VITE_LENZ_URL || "https://lenz.io";
 const QUERY_PARAMS = new URLSearchParams(window.location.search);
 const IS_EMBEDDED = QUERY_PARAMS.has("embedded");
+// Styling hook: embedded under the lenz.io nav the column sits on the left edge.
+if (IS_EMBEDDED) document.documentElement.dataset.embedded = "";
 const VALID_MODES: GameMode[] = ["ooo", "tf", "5v"];
 const AUTO_START_MODE = (() => {
   let m = QUERY_PARAMS.get("mode");
@@ -96,6 +98,24 @@ export default function GamePage() {
   const [oooResults, setOooResults] = useState<OddOneOutResult[]>([]);
 
   const confettiRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
+
+  // Embedded: tell the page around the game how tall it is, so the page scrolls
+  // and the frame never grows a second scrollbar. The page (lenz.io/play) sizes
+  // the iframe from this message; standalone it does nothing.
+  useEffect(() => {
+    if (!IS_EMBEDDED || !mainRef.current || window.parent === window) return;
+    const el = mainRef.current;
+    const send = () =>
+      window.parent.postMessage(
+        { type: "lenz-play-height", height: Math.ceil(el.getBoundingClientRect().height) },
+        "*",
+      );
+    const ro = new ResizeObserver(send);
+    ro.observe(el);
+    send();
+    return () => ro.disconnect();
+  }, []);
 
   // Track game finish analytics — captures values at the moment phase becomes "summary"
   const scoreRef = useRef(score);
@@ -262,7 +282,11 @@ export default function GamePage() {
         </div>
       )}
 
-      <main className="flex-1 pt-2 pb-16 relative overflow-hidden min-h-screen">
+      <main
+        ref={mainRef}
+        className={`flex-1 pt-2 pb-16 relative overflow-hidden ${IS_EMBEDDED ? "" : "min-h-screen"}`}
+        style={IS_EMBEDDED ? { paddingTop: 0 } : undefined}
+      >
         {/* Confetti container */}
         <div ref={confettiRef} className="absolute inset-0 pointer-events-none overflow-hidden" />
 
@@ -271,8 +295,8 @@ export default function GamePage() {
         {phase === "loading" && !autoStartPending && <GameIntro onStart={(m) => loadClaims(m)} loading={true} embedded={IS_EMBEDDED} />}
 
         {error && (
-          <div className="max-w-md mx-auto mt-4 px-4">
-            <div className="bg-false-bg border border-false/20 rounded-xl px-4 py-3 text-sm text-false text-center">
+          <div className="ff-col">
+            <div className="ff-error" role="alert">
               {error}
             </div>
           </div>

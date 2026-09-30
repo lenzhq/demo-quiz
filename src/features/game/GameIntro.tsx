@@ -6,147 +6,97 @@ interface GameIntroProps {
   embedded?: boolean;
 }
 
+type VerdictKey = "true" | "mostly-true" | "mixed" | "mostly-false" | "false";
+
+const MODES: {
+  mode: GameMode;
+  n: string;
+  title: string;
+  blurb: string;
+  verdicts: { key: VerdictKey; label: string }[];
+  foot: string;
+}[] = [
+  {
+    mode: "ooo",
+    n: "03",
+    title: "Odd One Out",
+    blurb: "See 3 claims each round. Two are true, one is false. Find the false one.",
+    verdicts: [
+      { key: "true", label: "True" },
+      { key: "true", label: "True" },
+      { key: "false", label: "False" },
+    ],
+    foot: "7 rounds · 100 pts + time bonus per round",
+  },
+  {
+    mode: "tf",
+    n: "02",
+    title: "True or False",
+    blurb: "Only claims rated True or False. Pick between two options.",
+    verdicts: [
+      { key: "true", label: "True" },
+      { key: "false", label: "False" },
+    ],
+    foot: "50 pts max per round",
+  },
+  {
+    mode: "5v",
+    n: "05",
+    title: "Five Verdicts",
+    blurb: "All verdict types. More nuance, more points to earn.",
+    verdicts: [
+      { key: "true", label: "True" },
+      { key: "mostly-true", label: "Mostly True" },
+      { key: "mixed", label: "Mixed" },
+      { key: "mostly-false", label: "Mostly False" },
+      { key: "false", label: "False" },
+    ],
+    foot: "100 pts max per round",
+  },
+];
+
 export default function GameIntro({ onStart, loading, embedded }: GameIntroProps) {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] px-4 text-center">
-      {embedded && <div className="pt-8" />}
-      <h1 className="text-3xl sm:text-4xl font-extrabold text-warm-800 mb-3 tracking-tight">
-        Fact or Fiction
-      </h1>
-      <p className="text-warm-500 text-base sm:text-lg max-w-md mb-2 leading-relaxed">
-        Real claims, real verdicts.
-        <br />
-        How well can you spot the truth?
+    <div className="ff-col" style={{ paddingTop: embedded ? 0 : 48 }}>
+      {/* Embedded, the page around the game already carries the title. */}
+      {!embedded && <h1 className="ff-title" style={{ fontSize: "clamp(32px, 2.4vw + 20px, 46px)" }}>Fact or Fiction</h1>}
+      <p className="ff-lede" style={embedded ? { marginTop: 0 } : undefined}>
+        Real claims, real verdicts. How well can you spot the truth?
       </p>
-      <p className="text-warm-400 text-sm max-w-sm mb-8 leading-relaxed">
+      <p className="ff-eyebrow" style={{ marginTop: 16 }}>
         Pick a mode below. Streaks earn bonus points!
       </p>
 
-      {/* Mode selection cards */}
-      <p className="text-xs font-semibold text-warm-400 uppercase tracking-widest mb-4">
-        Choose your mode
-      </p>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg mb-4">
-        {/* Odd One Out card */}
-        <button
-          onClick={() => onStart("ooo")}
-          disabled={loading}
-          className="group relative rounded-2xl border-2 border-false/30 bg-surface p-5 text-left
-                     sm:col-span-2
-                     hover:border-false/60 hover:shadow-lg hover:shadow-false/10 hover:scale-[1.02]
-                     active:scale-[0.98] transition-all
-                     disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-false/10 text-false text-sm font-black">
-              3
-            </span>
-            <h3 className="text-base font-extrabold text-warm-800">Odd One Out</h3>
-          </div>
-          <p className="text-xs text-warm-500 leading-relaxed mb-3">
-            See 3 claims each round. Two are true, one is false. Find the false one.
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-true/10 text-true">
-              <span className="w-1.5 h-1.5 rounded-full bg-true" /> True
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-true/10 text-true">
-              <span className="w-1.5 h-1.5 rounded-full bg-true" /> True
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-warm-100 text-warm-500">
-              <span className="w-1.5 h-1.5 rounded-full bg-warm-400" /> ???
-            </span>
-          </div>
-          <p className="mt-3 text-[10px] font-semibold text-warm-400">
-            7 rounds &middot; 100 pts + time bonus per round
-          </p>
-        </button>
-
-        {/* True or False card */}
-        <button
-          onClick={() => onStart("tf")}
-          disabled={loading}
-          className="group relative rounded-2xl border-2 border-true/30 bg-surface p-5 text-left
-                     hover:border-true/60 hover:shadow-lg hover:shadow-true/10 hover:scale-[1.02]
-                     active:scale-[0.98] transition-all
-                     disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-true/10 text-true text-sm font-black">
-              2
-            </span>
-            <h3 className="text-base font-extrabold text-warm-800">True or False</h3>
-          </div>
-          <p className="text-xs text-warm-500 leading-relaxed mb-3">
-            Only claims rated True or False. Pick between two options.
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-true/10 text-true">
-              <span className="w-1.5 h-1.5 rounded-full bg-true" /> True
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-false/10 text-false">
-              <span className="w-1.5 h-1.5 rounded-full bg-false" /> False
-            </span>
-          </div>
-          <p className="mt-3 text-[10px] font-semibold text-warm-400">50 pts max per round</p>
-        </button>
-
-        {/* Five Verdicts card */}
-        <button
-          onClick={() => onStart("5v")}
-          disabled={loading}
-          className="group relative rounded-2xl border-2 border-primary/30 bg-surface p-5 text-left
-                     hover:border-primary/60 hover:shadow-lg hover:shadow-primary/10 hover:scale-[1.02]
-                     active:scale-[0.98] transition-all
-                     disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary-text text-sm font-black">
-              5
-            </span>
-            <h3 className="text-base font-extrabold text-warm-800">Five Verdicts</h3>
-          </div>
-          <p className="text-xs text-warm-500 leading-relaxed mb-3">
-            All verdict types. More nuance, more points to earn.
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-true/10 text-true">
-              <span className="w-1.5 h-1.5 rounded-full bg-true" /> True
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-mostly-true/10 text-mostly-true">
-              <span className="w-1.5 h-1.5 rounded-full bg-mostly-true" /> Mostly True
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-mixed/10 text-mixed">
-              <span className="w-1.5 h-1.5 rounded-full bg-mixed" /> Mixed
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-mostly-false/10 text-mostly-false">
-              <span className="w-1.5 h-1.5 rounded-full bg-mostly-false" /> Mostly False
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold bg-false/10 text-false">
-              <span className="w-1.5 h-1.5 rounded-full bg-false" /> False
-            </span>
-          </div>
-          <p className="mt-3 text-[10px] font-semibold text-warm-400">100 pts max per round</p>
-        </button>
-      </div>
+      {/* Mode selection: open rows, one per mode */}
+      <ul className="ff-modes">
+        {MODES.map((m) => (
+          <li key={m.mode}>
+            <button onClick={() => onStart(m.mode)} disabled={loading} className="ff-mode">
+              <span className="ff-mode__n">{m.n}</span>
+              <span className="block min-w-0">
+                <span className="ff-mode__t">{m.title}</span>
+                <span className="ff-mode__d block">{m.blurb}</span>
+                <span className="ff-mode__f flex flex-wrap gap-x-4 gap-y-1">
+                  {m.verdicts.map((v, i) => (
+                    <span key={i} className={`ff-verdict ff-verdict--${v.key}`}>
+                      {v.label}
+                    </span>
+                  ))}
+                </span>
+                <span className="ff-eyebrow block" style={{ marginTop: 10 }}>
+                  {m.foot}
+                </span>
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
 
       {loading && (
-        <div className="flex items-center gap-2 text-warm-500 text-sm mt-2">
-          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-            />
+        <div className="ff-eyebrow flex items-center gap-2 mt-6" role="status">
+          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
           </svg>
           Loading claims...
         </div>

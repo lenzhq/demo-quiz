@@ -211,9 +211,7 @@ export default function ShareLinks(props: ShareLinksProps) {
       {/* Trigger */}
       {buttonLabel ? (
         <button
-          className="rounded-xl border-2 border-warm-200 bg-surface px-6 py-3 text-warm-700 font-bold text-sm
-                     hover:border-warm-300 active:scale-[0.97] transition-all cursor-pointer
-                     inline-flex items-center gap-2"
+          className="ff-btn ff-btn--ghost"
           onClick={toggleMenu}
           aria-expanded={open}
           aria-haspopup="true"
