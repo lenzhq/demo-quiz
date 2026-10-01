@@ -110,8 +110,8 @@ body {
   outline: none;
 }
 
-/* ── Site layer, game edition ──
-   The game follows lenz.io's site layer (DESIGN.md): ink and blue, 4px frames,
+/* ── The lenz.io look, game edition ──
+   The game follows the lenz.io design: ink and blue, 4px frames,
    mono for data, verdict colour only on verdict labels. Every colour is a token
    above, so dark mode comes from the token block, not from rules here. */
 html[data-embedded] body { background: transparent; }
