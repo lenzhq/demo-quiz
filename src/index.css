@@ -137,7 +137,8 @@ html[data-embedded] .ff-col { margin: 0; padding: 0; }
   letter-spacing: -0.02em; color: var(--color-warm-900);
 }
 .ff-score--lg { font-size: clamp(40px, 4vw, 64px); line-height: 1; letter-spacing: -0.04em; }
-.ff-score .denom { font-size: 0.4em; letter-spacing: 0; color: var(--color-warm-400); }
+.ff-score .denom { letter-spacing: 0; color: var(--color-warm-500); }
+.ff-score--lg .denom { font-size: 0.4em; color: var(--color-warm-400); }
 
 /* Progress: one rule per round, blue while running, ink when done. */
 .ff-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 12px; }
@@ -195,7 +196,7 @@ button.ff-artefact.is-picked.is-false { color: var(--color-false); }
   transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 .ff-btn--primary { background: var(--color-warm-900); color: var(--color-cream); }
-.ff-btn--primary:hover { background: var(--color-primary); color: var(--color-cream); }
+.ff-btn--primary:hover { background: var(--color-primary-hover); color: var(--color-cream); }
 .ff-btn--ghost { background: transparent; color: var(--color-warm-900); box-shadow: inset 0 0 0 1px var(--color-warm-300); }
 .ff-btn--ghost:hover { box-shadow: inset 0 0 0 1px var(--color-warm-900); }
 .ff-btn:disabled { opacity: 0.35; cursor: default; }

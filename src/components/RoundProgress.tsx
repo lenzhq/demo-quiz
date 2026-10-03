@@ -23,7 +23,7 @@ export default function RoundProgress({
           {score} pts
         </span>
       </div>
-      <ol className="ff-track" aria-label={`Round ${roundNumber} of ${totalRounds}`}>
+      <ol className="ff-track" aria-hidden="true">
         {Array.from({ length: totalRounds }).map((_, i) => (
           <li
             key={i}

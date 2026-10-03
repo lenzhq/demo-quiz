@@ -18,8 +18,8 @@ export default function Countdown({ seconds }: { seconds: number }) {
   }, [seconds]);
 
   return (
-    <div className="ff-timer" aria-hidden="true">
-      <div className="ff-timer__rule">
+    <div className="ff-timer" role="timer" aria-label="Time left">
+      <div className="ff-timer__rule" aria-hidden="true">
         <span style={{ width: "100%", animation: `timerShrink ${seconds}s linear forwards` }} />
       </div>
       <span className={`ff-timer__n${left <= LOW_SECONDS ? " is-low" : ""}`}>{left}s</span>
