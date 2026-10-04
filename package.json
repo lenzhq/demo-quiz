@@ -7,10 +7,10 @@
   "homepage": "https://play.lenz.io",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lenzhq/Lenz-FactOrFiction.git"
+    "url": "git+https://github.com/lenzhq/demo-quiz.git"
   },
   "bugs": {
-    "url": "https://github.com/lenzhq/Lenz-FactOrFiction/issues"
+    "url": "https://github.com/lenzhq/demo-quiz/issues"
   },
   "author": "Lenz <support@lenz.io>",
   "license": "MIT",
