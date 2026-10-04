@@ -10,23 +10,34 @@
     <!-- Social/OG tags live on the wrapper page (lenz.io/play), which is the
          canonical shareable surface. This standalone app is embedded there. -->
     <meta name="theme-color" content="#FFFDF7" />
-    <!-- Theme: read lenz_theme cookie from parent site, fall back to OS preference -->
+    <!-- Theme, in order of precedence: a ?theme=light|dark param or a
+         {type:'lenz-theme', theme} message from the lenz.io page this game is
+         embedded in; then the lenz_theme cookie; then the OS preference.
+         Messages are accepted only from lenz.io / www.lenz.io and only from
+         the embedding parent window. -->
     <script>
     (function(){
       var d=document.documentElement,m='(prefers-color-scheme:dark)';
+      var tc=document.querySelector('meta[name="theme-color"]');
+      var forced=false;
+      function apply(r){
+        d.dataset.theme=r;
+        if(tc)tc.content=r==='dark'?'#1A1816':'#FFFDF7';
+      }
       var c=document.cookie.split(';').find(function(s){return s.trim().startsWith('lenz_theme=')});
       var p=c?c.split('=')[1].trim():'system';
-      var r=p==='system'?(window.matchMedia&&window.matchMedia(m).matches?'dark':'light'):p;
-      d.dataset.theme=r;
-      var tc=document.querySelector('meta[name="theme-color"]');
-      if(tc)tc.content=r==='dark'?'#1A1816':'#FFFDF7';
+      apply(p==='system'?(window.matchMedia&&window.matchMedia(m).matches?'dark':'light'):p);
       try{window.matchMedia(m).addEventListener('change',function(){
-        if(p==='system'){
-          r=window.matchMedia(m).matches?'dark':'light';
-          d.dataset.theme=r;
-          if(tc)tc.content=r==='dark'?'#1A1816':'#FFFDF7';
-        }
+        if(p==='system'&&!forced)apply(window.matchMedia(m).matches?'dark':'light');
       })}catch(e){}
+      var q=new URLSearchParams(window.location.search).get('theme');
+      if(q==='light'||q==='dark'){forced=true;apply(q);}
+      var ORIGINS=['https://lenz.io','https://www.lenz.io'];
+      window.addEventListener('message',function(e){
+        if(ORIGINS.indexOf(e.origin)<0||e.source!==window.parent)return;
+        var t=e.data&&e.data.type==='lenz-theme'?e.data.theme:null;
+        if(t==='light'||t==='dark'){forced=true;apply(t);}
+      });
     })();
     </script>
   </head>
