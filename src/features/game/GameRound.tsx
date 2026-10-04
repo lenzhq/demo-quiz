@@ -283,11 +283,18 @@ export default function GameRound({
             )}
           </div>
 
-          {/* Executive summary */}
-          {showSummary && claim.executive_summary && (
+          {/* The suggested rewrite when there is one, else the summary */}
+          {showSummary && claim.suggested_rewrite ? (
             <p className="ff-why animate-[fadeIn_0.4s_ease-out]">
-              {renderEmphasis(claim.executive_summary)}
+              <span className="ff-why__label">Suggested rewrite</span>
+              {claim.suggested_rewrite}
             </p>
+          ) : (
+            showSummary && claim.executive_summary && (
+              <p className="ff-why animate-[fadeIn_0.4s_ease-out]">
+                {renderEmphasis(claim.executive_summary)}
+              </p>
+            )
           )}
 
           {/* Next button */}
