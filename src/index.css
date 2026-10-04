@@ -204,8 +204,17 @@ button.ff-artefact.is-picked.is-false { color: var(--color-false); }
 
 /* Answer buttons (true/false and five verdicts): a framed verdict label each. */
 .ff-answers { display: grid; gap: 12px; margin: 0 0 24px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.ff-answers--five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-@media (min-width: 640px) { .ff-answers--five { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+/* Five Verdicts: one row from 640px, True to False left to right like the
+   scale; on a phone two rows, three then two, the second row centred. Each
+   button stacks the dot over its label, centred, and a two-word label takes
+   two lines ("Mostly / False"). */
+.ff-answers--five { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.ff-answers--five .ff-answer { flex: 0 0 calc((100% - 16px) / 3); display: flex; align-items: center; justify-content: center; padding: 14px 6px; text-align: center; }
+.ff-answers--five .ff-verdict { flex-direction: column; gap: 6px; text-align: center; letter-spacing: 0.04em; line-height: 1.3; }
+@media (min-width: 640px) {
+  .ff-answers--five { gap: 12px; flex-wrap: nowrap; }
+  .ff-answers--five .ff-answer { flex: 1 1 0; min-width: 0; padding: 18px 8px; }
+}
 .ff-answer { padding: 18px 16px; }
 .ff-answer .ff-verdict { letter-spacing: 0.06em; }
 .ff-answer .ff-verdict--mostly-true, .ff-answer .ff-verdict--mostly-false { white-space: normal; }
@@ -217,6 +226,8 @@ button.ff-artefact.is-picked.is-false { color: var(--color-false); }
 .ff-result__bonus { font-family: var(--font-mono); font-size: 13px; color: var(--color-warm-600); }
 .ff-guess { margin: 0 0 16px; font-size: 15px; color: var(--color-warm-600); display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
 .ff-why { margin: 0 0 24px; font-size: 15px; line-height: 1.6; color: var(--color-warm-700); max-width: 65ch; }
+/* "Suggested rewrite", lenz.io's label for the claim with its wrong part corrected: a mono label on its own line above it. */
+.ff-why__label { display: block; margin-bottom: 4px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-warm-500); }
 
 /* Facts and recap. */
 .ff-stats { display: flex; flex-wrap: wrap; gap: 24px 56px; margin: 0 0 40px; padding: 0; list-style: none; }

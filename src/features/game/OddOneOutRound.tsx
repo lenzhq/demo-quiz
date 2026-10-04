@@ -237,10 +237,17 @@ export default function OddOneOutRound({
                       <span className={`ff-verdict ${isFalse ? "ff-verdict--false" : "ff-verdict--true"}`}>
                         {isFalse ? "FALSE" : "TRUE"}
                       </span>
-                      {isFalse && showDetails && claim.executive_summary && (
+                      {isFalse && showDetails && claim.suggested_rewrite ? (
                         <p className="ff-claim__why line-clamp-3">
-                          {renderEmphasis(claim.executive_summary)}
+                          <span className="ff-why__label">Suggested rewrite</span>
+                          {claim.suggested_rewrite}
                         </p>
+                      ) : (
+                        isFalse && showDetails && claim.executive_summary && (
+                          <p className="ff-claim__why line-clamp-3">
+                            {renderEmphasis(claim.executive_summary)}
+                          </p>
+                        )
                       )}
                     </div>
                   )}

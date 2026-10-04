@@ -13,9 +13,16 @@ import type { LibraryItem } from "lenz-io";
 // production so a fresh clone works with zero config.
 // ---------------------------------------------------------------------------
 
-const client = new Lenz({
-  baseUrl: import.meta.env.VITE_API_BASE || "https://lenz.io/api/v1",
-});
+// The SDK builds request URLs with `new URL(...)`, which needs an absolute
+// base: a relative one (say "/api" behind a dev proxy) resolves against the
+// page's own origin here.
+const RAW_API_BASE = import.meta.env.VITE_API_BASE || "https://lenz.io/api/v1";
+const API_BASE = new URL(
+  RAW_API_BASE,
+  typeof window !== "undefined" ? window.location.origin : "https://lenz.io",
+).toString().replace(/\/$/, "");
+
+const client = new Lenz({ baseUrl: API_BASE });
 
 const LENZ_URL = import.meta.env.VITE_LENZ_URL || "https://lenz.io";
 
@@ -34,6 +41,10 @@ export interface GameClaim {
   verdict: string;
   lenz_score: number | null;
   executive_summary: string;
+  // The claim with its wrong part corrected, when the verification wrote one
+  // (null on True rows and when there is nothing to correct). Shown instead of
+  // the summary, as lenz.io does ("Suggested rewrite").
+  suggested_rewrite: string;
   created_at: string | null;
   // The library endpoint returns no url, so we build it from the
   // verification_id (lenz.io/c/<id> resolves to the full result page).
@@ -56,6 +67,7 @@ function mapItem(item: LibraryItem): GameClaim {
     verdict: item.verdict === "Misleading" ? "Mixed" : (item.verdict ?? ""),
     lenz_score: item.lenz_score ?? null,
     executive_summary: item.executive_summary ?? "",
+    suggested_rewrite: item.suggested_rewrite ?? "",
     created_at: item.created_at ?? null,
     url: `${LENZ_URL}/c/${id}`,
   };
