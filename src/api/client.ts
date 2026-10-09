@@ -24,6 +24,13 @@ const API_BASE = new URL(
 
 const client = new Lenz({ baseUrl: API_BASE });
 
+// lenz-io 3.x throws `LenzApiVersionError` (it carries `apiVersion`) when the
+// API answers in a version this build does not read. Checked by its field, not
+// its class name, so a minified build still recognises it.
+export function isApiVersionError(err: unknown): boolean {
+  return typeof (err as { apiVersion?: unknown } | null)?.apiVersion === "string";
+}
+
 const LENZ_URL = import.meta.env.VITE_LENZ_URL || "https://lenz.io";
 
 // ---------------------------------------------------------------------------
