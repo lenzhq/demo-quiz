@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "A trivia game built on the Lenz public API via the lenz-io SDK \u2014 an open-source demo.",
+  "description": "A trivia game built on the Lenz public API via the lenz-io SDK — an open-source demo.",
   "homepage": "https://play.lenz.io",
   "repository": {
     "type": "git",
