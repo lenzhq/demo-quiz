@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { fetchGameClaims, fetchOddOneOutRounds } from "../api/client";
+import { fetchGameClaims, fetchOddOneOutRounds, isApiVersionError } from "../api/client";
 import type { GameClaim, GameMode } from "../api/client";
 import { trackGameStart, trackGameFinish } from "../utils/analytics";
 import LenzLogo from "../components/LenzLogo";
@@ -191,8 +191,12 @@ export default function GamePage() {
       setPhase("playing");
       window.scrollTo(0, 0);
       trackGameStart(m);
-    } catch {
-      setError("Failed to load claims. Please try again.");
+    } catch (err) {
+      setError(
+        isApiVersionError(err)
+          ? "The game and the Lenz API are out of step right now. Please try again later."
+          : "Failed to load claims. Please try again.",
+      );
       setPhase("intro");
     }
   }, []);
